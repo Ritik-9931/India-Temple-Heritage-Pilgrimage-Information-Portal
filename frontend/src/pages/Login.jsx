@@ -136,7 +136,7 @@ const Login = () => {
   onSuccess={async (credentialResponse) => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/users/google",
+        "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
         {
           method: "POST",
           headers: {

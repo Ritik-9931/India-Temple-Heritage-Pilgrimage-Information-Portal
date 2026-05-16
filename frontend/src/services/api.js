@@ -5,7 +5,7 @@ import axios from "axios";
 ========================= */
 
 const BASE_URL =
-  "http://localhost:5000/api";
+  "https://india-temple-heritage-pilgrimage.onrender.com/api";
 
 /* =========================
    AXIOS INSTANCE
