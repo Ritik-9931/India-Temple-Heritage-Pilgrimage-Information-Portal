@@ -9,11 +9,14 @@ import { store } from "./redux/store.jsx";
 import "leaflet/dist/leaflet.css";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="374111445497-nr8jpc9gka9g5ibqhcoq52r7mctnu97s.apps.googleusercontent.com">
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
-  </GoogleOAuthProvider>
+  </GoogleOAuthProvider>,
 );
