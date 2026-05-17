@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { registerUser } from "../redux/slices/authSlice";
+import { registerUser, setCredentials } from "../redux/slices/authSlice";
 
 import { useNavigate, Link } from "react-router-dom";
 
@@ -155,6 +155,8 @@ const Register = () => {
                   console.log(data);
 
                   localStorage.setItem("userInfo", JSON.stringify(data));
+
+                  dispatch(setCredentials(data));
 
                   navigate("/");
                 } catch (error) {

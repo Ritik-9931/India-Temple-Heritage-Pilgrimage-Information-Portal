@@ -13,9 +13,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { loading, error, userInfo } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, error, userInfo } = useSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");
 
@@ -28,7 +26,7 @@ const Login = () => {
       loginUser({
         email,
         password,
-      })
+      }),
     );
   };
 
@@ -48,8 +46,8 @@ const Login = () => {
           </h1>
 
           <p className="text-lg text-orange-100 leading-8">
-            Explore sacred temples, discover spiritual
-            places, and continue your divine journey.
+            Explore sacred temples, discover spiritual places, and continue your
+            divine journey.
           </p>
 
           <img
@@ -61,13 +59,9 @@ const Login = () => {
 
         {/* RIGHT */}
         <div className="p-8 md:p-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-2">
-            Login
-          </h2>
+          <h2 className="text-4xl font-bold text-gray-800 mb-2">Login</h2>
 
-          <p className="text-gray-500 mb-8">
-            Sign in to your account
-          </p>
+          <p className="text-gray-500 mb-8">Sign in to your account</p>
 
           {error && (
             <div className="bg-red-100 text-red-500 p-3 rounded-xl mb-5">
@@ -75,10 +69,7 @@ const Login = () => {
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block mb-2 font-medium text-gray-700">
                 Email
@@ -88,9 +79,7 @@ const Login = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) =>
-                  setEmail(e.target.value)
-                }
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-gray-300 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-400"
               />
             </div>
@@ -104,9 +93,7 @@ const Login = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) =>
-                  setPassword(e.target.value)
-                }
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-400"
               />
             </div>
@@ -123,9 +110,7 @@ const Login = () => {
           <div className="flex items-center my-8">
             <div className="flex-1 h-[1px] bg-gray-300"></div>
 
-            <span className="px-4 text-gray-400 text-sm">
-              OR CONTINUE WITH
-            </span>
+            <span className="px-4 text-gray-400 text-sm">OR CONTINUE WITH</span>
 
             <div className="flex-1 h-[1px] bg-gray-300"></div>
           </div>
@@ -133,50 +118,44 @@ const Login = () => {
           {/* Google Login */}
           <div className="flex justify-center">
             <GoogleLogin
-  onSuccess={async (credentialResponse) => {
-    try {
-      const res = await fetch(
-        "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: credentialResponse.credential,
-          }),
-        }
-      );
+              onSuccess={async (credentialResponse) => {
+                try {
+                  const res = await fetch(
+                    "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        token: credentialResponse.credential,
+                      }),
+                    },
+                  );
 
-      const data = await res.json();
+                  const data = await res.json();
 
-      console.log(data);
+                  console.log(data);
 
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify(data)
-      );
+                  localStorage.setItem("userInfo", JSON.stringify(data));
 
-      dispatch(setCredentials(data))
+                  dispatch(setCredentials(data));
 
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  }}
-  onError={() => {
-    console.log("Google Login Failed");
-  }}
-/>
+                  navigate("/");
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+              onError={() => {
+                console.log("Google Login Failed");
+              }}
+            />
           </div>
 
           {/* Register */}
           <p className="mt-8 text-center text-gray-600">
             Don't have an account?
-            <Link
-              to="/register"
-              className="text-orange-500 font-semibold ml-2"
-            >
+            <Link to="/register" className="text-orange-500 font-semibold ml-2">
               Register
             </Link>
           </p>
