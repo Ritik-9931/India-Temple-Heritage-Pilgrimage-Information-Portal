@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { loginUser } from "../redux/slices/authSlice";
+import { loginUser, setCredentials } from "../redux/slices/authSlice";
 
 import { useNavigate, Link } from "react-router-dom";
 
@@ -156,6 +156,8 @@ const Login = () => {
         "userInfo",
         JSON.stringify(data)
       );
+
+      dispatch(setCredentials(data))
 
       navigate("/");
     } catch (error) {
