@@ -127,7 +127,7 @@ const TempleDetail = () => {
                       <p className="text-gray-500 mb-2">Build Year</p>
 
                       <h3 className="text-xl font-bold text-gray-800">
-                        {temple.buildYear}
+                        {temple.builtYear}
                       </h3>
                     </div>
                   </div>
