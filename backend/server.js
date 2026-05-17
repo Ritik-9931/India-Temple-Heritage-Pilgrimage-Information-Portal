@@ -14,7 +14,9 @@ import authRoutes from "./routes/authRoutes.js";
 
 import categoryRoutes from "./routes/categoryRoutes.js";
 
-import userRoutes from "./routes/userRoutes.js"
+import userRoutes from "./routes/userRoutes.js";
+
+import { errorHandler } from "./middleware/errorMiddleware.js";
 
 connectDB();
 
@@ -34,6 +36,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 
 app.use("/api/users", userRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

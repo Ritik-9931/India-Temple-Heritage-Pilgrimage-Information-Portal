@@ -8,6 +8,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { GoogleLogin } from "@react-oauth/google";
 
+import toast from "react-hot-toast";
+
 const Register = () => {
   const dispatch = useDispatch();
 
@@ -35,9 +37,17 @@ const Register = () => {
 
   useEffect(() => {
     if (userInfo) {
+      toast.success("Registration Successful 🎉");
+
       navigate("/");
     }
   }, [userInfo, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-100 via-orange-50 to-white flex items-center justify-center px-4">
@@ -152,19 +162,26 @@ const Register = () => {
 
                   const data = await res.json();
 
-                  console.log(data);
+                  if (!res.ok) {
+                    toast.error(data.message || "Google Login Failed");
+                    return;
+                  }
 
                   localStorage.setItem("userInfo", JSON.stringify(data));
 
                   dispatch(setCredentials(data));
 
+                  toast.success("Login Successful 🎉");
+
                   navigate("/");
                 } catch (error) {
                   console.log(error);
+
+                  toast.error("Something went wrong");
                 }
               }}
               onError={() => {
-                console.log("Google Login Failed");
+                toast.error("Google Login Failed");
               }}
             />
           </div>

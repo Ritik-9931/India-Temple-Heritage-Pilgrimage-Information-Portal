@@ -17,7 +17,7 @@ export const registerUser = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration Failed!");
     }
   },
 );
@@ -37,7 +37,7 @@ export const loginUser = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Login Failed");
     }
   },
 );
