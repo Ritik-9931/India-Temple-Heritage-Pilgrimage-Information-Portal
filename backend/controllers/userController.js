@@ -26,7 +26,6 @@ export const googleLogin = async (req, res, next) => {
         name,
         email,
         password: hashedPassword,
-        profilePic: picture,
       });
     }
 
@@ -44,6 +43,11 @@ export const googleLogin = async (req, res, next) => {
       token: generateToken(user._id),
     });
   } catch (error) {
-    next(error);
+    console.error("Google login error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Google login failed",
+    });
   }
 };
