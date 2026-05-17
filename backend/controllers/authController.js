@@ -4,19 +4,21 @@ import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
+import generateToken from "../utils/generateToken.js"
+
 /* =========================
    GENERATE JWT TOKEN
 ========================= */
 
-const generateToken = (id) => {
-  return jwt.sign(
-    { id },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "30d",
-    }
-  );
-};
+// const generateToken = (id) => {
+//   return jwt.sign(
+//     { id },
+//     process.env.JWT_SECRET,
+//     {
+//       expiresIn: "30d",
+//     }
+//   );
+// };
 
 /* =========================
    REGISTER USER
