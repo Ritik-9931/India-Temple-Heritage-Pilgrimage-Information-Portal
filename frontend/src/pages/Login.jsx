@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { loginUser, setCredentials } from "../redux/slices/authSlice";
+import {
+  loginUser,
+  setCredentials,
+} from "../redux/slices/authSlice";
 
-import { useNavigate, Link } from "react-router-dom";
+import {
+  useNavigate,
+  Link,
+} from "react-router-dom";
 
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -15,11 +21,23 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { loading, error, userInfo } = useSelector((state) => state.auth);
+  const {
+    loading,
+    error,
+    userInfo,
+  } = useSelector(
+    (state) => state.auth,
+  );
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] =
+    useState("");
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] =
+    useState("");
+
+  /* =========================
+     LOGIN
+  ========================= */
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,12 +50,23 @@ const Login = () => {
     );
   };
 
+  /* =========================
+     SUCCESS
+  ========================= */
+
   useEffect(() => {
     if (userInfo) {
-      toast.success("Login Successful 🎉");
+      toast.success(
+        "Login Successful 🎉",
+      );
+
       navigate("/");
     }
   }, [userInfo, navigate]);
+
+  /* =========================
+     ERROR
+  ========================= */
 
   useEffect(() => {
     if (error) {
@@ -46,41 +75,51 @@ const Login = () => {
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 via-orange-50 to-white flex items-center justify-center px-4">
-      <div className="bg-white shadow-2xl rounded-3xl overflow-hidden max-w-5xl w-full grid grid-cols-1 md:grid-cols-2">
-        {/* LEFT */}
-        <div className="hidden md:flex flex-col justify-center bg-orange-500 text-white p-12">
-          <h1 className="text-5xl font-extrabold mb-6 leading-tight">
+    <div className="h-screen overflow-hidden bg-gradient-to-br from-orange-100 via-orange-50 to-white flex items-center justify-center px-4 py-4">
+      <div className="bg-white shadow-2xl rounded-3xl overflow-hidden max-w-4xl w-full grid grid-cols-1 md:grid-cols-2">
+        {/* ================= LEFT ================= */}
+
+        <div className="hidden md:flex flex-col justify-center bg-orange-500 text-white p-8">
+          <h1 className="text-4xl font-extrabold mb-5 leading-tight">
             Welcome Back
           </h1>
 
-          <p className="text-lg text-orange-100 leading-8">
-            Explore sacred temples, discover spiritual places, and continue your
-            divine journey.
+          <p className="text-base text-orange-100 leading-7">
+            Explore sacred
+            temples, discover
+            spiritual places, and
+            continue your divine
+            journey.
           </p>
 
           <img
             src="https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=1200&auto=format&fit=crop"
             alt="Temple"
-            className="mt-10 rounded-3xl h-72 object-cover shadow-xl"
+            className="mt-6 rounded-3xl h-52 object-cover shadow-xl"
           />
         </div>
 
-        {/* RIGHT */}
-        <div className="p-8 md:p-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-2">Login</h2>
+        {/* ================= RIGHT ================= */}
 
-          <p className="text-gray-500 mb-8">Sign in to your account</p>
+        <div className="p-6 md:p-8 flex flex-col justify-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            Login
+          </h2>
 
-          {error && (
-            <div className="bg-red-100 text-red-500 p-3 rounded-xl mb-5">
-              {error}
-            </div>
-          )}
+          <p className="text-gray-500 mb-6">
+            Sign in to your account
+          </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {/* ================= FORM ================= */}
+
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+          >
+            {/* EMAIL */}
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">
+              <label className="block mb-1 font-medium text-gray-700">
                 Email
               </label>
 
@@ -88,13 +127,20 @@ const Login = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-400"
+                onChange={(e) =>
+                  setEmail(
+                    e.target.value,
+                  )
+                }
+                className="w-full border border-gray-300 rounded-2xl p-3 outline-none focus:ring-2 focus:ring-orange-400"
+                required
               />
             </div>
 
+            {/* PASSWORD */}
+
             <div>
-              <label className="block mb-2 font-medium text-gray-700">
+              <label className="block mb-1 font-medium text-gray-700">
                 Password
               </label>
 
@@ -102,76 +148,125 @@ const Login = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-400"
+                onChange={(e) =>
+                  setPassword(
+                    e.target.value,
+                  )
+                }
+                className="w-full border border-gray-300 rounded-2xl p-3 outline-none focus:ring-2 focus:ring-orange-400"
+                required
               />
             </div>
 
+            {/* BUTTON */}
+
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-2xl font-bold text-lg transition duration-300"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl font-bold text-base transition duration-300"
             >
-              {loading ? "Loading..." : "Login"}
+              {loading
+                ? "Loading..."
+                : "Login"}
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center my-8">
+          {/* ================= DIVIDER ================= */}
+
+          <div className="flex items-center my-6">
             <div className="flex-1 h-[1px] bg-gray-300"></div>
 
-            <span className="px-4 text-gray-400 text-sm">OR CONTINUE WITH</span>
+            <span className="px-4 text-gray-400 text-sm">
+              OR CONTINUE WITH
+            </span>
 
             <div className="flex-1 h-[1px] bg-gray-300"></div>
           </div>
 
-          {/* Google Login */}
+          {/* ================= GOOGLE LOGIN ================= */}
+
           <div className="flex justify-center">
             <GoogleLogin
-              onSuccess={async (credentialResponse) => {
+              onSuccess={async (
+                credentialResponse,
+              ) => {
                 try {
-                  const res = await fetch(
-                    "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        token: credentialResponse.credential,
-                      }),
-                    },
-                  );
+                  const res =
+                    await fetch(
+                      "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
+                      {
+                        method: "POST",
 
-                  const data = await res.json();
+                        headers: {
+                          "Content-Type":
+                            "application/json",
+                        },
+
+                        body: JSON.stringify(
+                          {
+                            token:
+                              credentialResponse.credential,
+                          },
+                        ),
+                      },
+                    );
+
+                  const data =
+                    await res.json();
 
                   if (!res.ok) {
-                    toast.error(data.message || "Google Login Failed");
+                    toast.error(
+                      data.message ||
+                        "Google Login Failed",
+                    );
+
                     return;
                   }
 
-                  localStorage.setItem("userInfo", JSON.stringify(data));
+                  localStorage.setItem(
+                    "userInfo",
+                    JSON.stringify(
+                      data,
+                    ),
+                  );
 
-                  dispatch(setCredentials(data));
+                  dispatch(
+                    setCredentials(
+                      data,
+                    ),
+                  );
 
-                  toast.success("Login Successful 🎉");
+                  toast.success(
+                    "Login Successful 🎉",
+                  );
 
                   navigate("/");
                 } catch (error) {
-                  console.log(error);
+                  console.log(
+                    error,
+                  );
 
-                  toast.error("Something went wrong");
+                  toast.error(
+                    "Something went wrong",
+                  );
                 }
               }}
               onError={() => {
-                toast.error("Google Login Failed");
+                toast.error(
+                  "Google Login Failed",
+                );
               }}
             />
           </div>
 
-          {/* Register */}
-          <p className="mt-8 text-center text-gray-600">
-            Don't have an account?
-            <Link to="/register" className="text-orange-500 font-semibold ml-2">
+          {/* ================= REGISTER LINK ================= */}
+
+          <p className="mt-6 text-center text-gray-600 text-sm">
+            Don't have an
+            account?
+            <Link
+              to="/register"
+              className="text-orange-500 font-semibold ml-2"
+            >
               Register
             </Link>
           </p>
