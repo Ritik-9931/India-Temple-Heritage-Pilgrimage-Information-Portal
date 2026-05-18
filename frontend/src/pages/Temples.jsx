@@ -7,9 +7,9 @@ const Temples = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { temples, loading, error } = useSelector(
-    (state) => state.temple
-  );
+  const { temples, loading, error } = useSelector((state) => state.temple);
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const [search, setSearch] = useState("");
 
@@ -18,7 +18,7 @@ const Temples = () => {
       fetchTemples({
         page: 1,
         keyword: search,
-      })
+      }),
     );
   }, [dispatch, search]);
 
@@ -55,9 +55,7 @@ const Temples = () => {
 
       {/* Error */}
       {error && (
-        <div className="text-center text-red-500 font-medium">
-          {error}
-        </div>
+        <div className="text-center text-red-500 font-medium">{error}</div>
       )}
 
       {/* Temple Cards */}
@@ -82,9 +80,7 @@ const Temples = () => {
                 {temple.templeName}
               </h2>
 
-              <p className="text-gray-500 mb-3">
-                📍 {temple.city}
-              </p>
+              <p className="text-gray-500 mb-3">📍 {temple.city}</p>
 
               {/* Categories */}
               <div className="flex flex-wrap gap-2">
@@ -99,9 +95,21 @@ const Temples = () => {
               </div>
 
               {/* Button */}
-              <button onClick={()=>navigate(`/templeDetails/${temple._id}`)} className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition duration-300">
+              <button
+                onClick={() => navigate(`/templeDetails/${temple._id}`)}
+                className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition duration-300"
+              >
                 View Details
               </button>
+
+              {userInfo.role === "admin" && (
+                <button
+                onClick={() => navigate(`/admin/editTemple/${temple._id}`)}
+                className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition duration-300"
+              >
+                Edit temple
+              </button>
+              )}
             </div>
           </div>
         ))}
