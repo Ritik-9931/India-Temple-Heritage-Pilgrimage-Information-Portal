@@ -154,7 +154,11 @@ const templeSlice = createSlice({
       .addCase(fetchTemples.fulfilled, (state, action) => {
         state.loading = false;
 
-        state.temples = action.payload.temples;
+        if (action.payload.page === 1) {
+          state.temples = action.payload.temples;
+        } else {
+          state.temples = [...state.temples, ...action.payload.temples];
+        }
 
         state.page = action.payload.page;
 

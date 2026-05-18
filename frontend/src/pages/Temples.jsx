@@ -7,20 +7,50 @@ const Temples = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { temples, loading, error } = useSelector((state) => state.temple);
+  const { temples, loading, error, totalPages } = useSelector(
+    (state) => state.temple,
+  );
 
   const { userInfo } = useSelector((state) => state.auth);
 
   const [search, setSearch] = useState("");
 
+  const [page, setPage] = useState(1);
+
+  const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
     dispatch(
       fetchTemples({
-        page: 1,
+        page,
         keyword: search,
       }),
     );
-  }, [dispatch, search]);
+  }, [dispatch, page, search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const main = document.getElementById("main-content");
+
+      if (!main) return;
+
+      const mainBottom = main.offsetTop + main.offsetHeight;
+
+      const scrollPosition = window.innerHeight + window.scrollY;
+
+      if (scrollPosition >= mainBottom - 200 && !loading && page < totalPages) {
+        setPage((prev) => prev + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, page, totalPages]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4">
@@ -104,11 +134,11 @@ const Temples = () => {
 
               {userInfo.role === "admin" && (
                 <button
-                onClick={() => navigate(`/admin/editTemple/${temple._id}`)}
-                className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition duration-300"
-              >
-                Edit temple
-              </button>
+                  onClick={() => navigate(`/admin/editTemple/${temple._id}`)}
+                  className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition duration-300"
+                >
+                  Edit temple
+                </button>
               )}
             </div>
           </div>

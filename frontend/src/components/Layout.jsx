@@ -11,7 +11,7 @@ const Layout = () => {
       <header>
         <Header />
       </header>
-      <main>
+      <main id="main-content">
         <Outlet />
       </main>
       <footer>
