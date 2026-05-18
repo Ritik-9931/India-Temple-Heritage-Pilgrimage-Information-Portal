@@ -148,20 +148,6 @@ const CreateTemple = () => {
   }, [templeName]);
 
   /* =========================
-     HANDLE IMAGES
-  ========================= */
-
-  const handleImages = (e) => {
-    const files = Array.from(e.target.files);
-
-    setImages(files);
-
-    const previews = files.map((file) => URL.createObjectURL(file));
-
-    setPreviewImages(previews);
-  };
-
-  /* =========================
      HANDLE CATEGORY
   ========================= */
 
@@ -246,6 +232,32 @@ const CreateTemple = () => {
     if (confirmDelete) {
       dispatch(deleteTemple(id));
     }
+  };
+
+  /* =========================
+   HANDLE IMAGES
+========================= */
+
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+
+    setImages((prev) => [...prev, ...files]);
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+
+    setPreviewImages((prev) => [...prev, ...previews]);
+  };
+
+  /* =========================
+   REMOVE IMAGE
+========================= */
+
+  const removeImage = (indexToRemove) => {
+    setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
+
+    setPreviewImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
   };
 
   /* =========================
@@ -506,12 +518,21 @@ const CreateTemple = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-6">
                 {previewImages.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt=""
-                    className="h-44 w-full object-cover rounded-2xl shadow-lg"
-                  />
+                  <div key={index} className="relative">
+                    <img
+                      src={image}
+                      alt=""
+                      className="h-44 w-full object-cover rounded-2xl shadow-lg"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>

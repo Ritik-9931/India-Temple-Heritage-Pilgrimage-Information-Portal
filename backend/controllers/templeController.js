@@ -185,14 +185,23 @@ export const updateTemple = async (req, res) => {
     }
 
     /* =========================
-       HANDLE IMAGES
-    ========================= */
+   HANDLE IMAGES
+========================= */
 
-    let imageUrls = temple.images;
+    let imageUrls = [];
+
+    /* KEEP ONLY REMAINING OLD IMAGES */
+
+    if (req.body.existingImages) {
+      imageUrls = JSON.parse(req.body.existingImages);
+    }
+
+    /* ADD NEW UPLOADED IMAGES */
 
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map((file) => file.path);
-      imageUrls = [...temple.images, ...newImages]
+
+      imageUrls = [...imageUrls, ...newImages];
     }
 
     /* =========================
@@ -228,7 +237,7 @@ export const updateTemple = async (req, res) => {
     temple.featured =
       req.body.featured !== undefined ? req.body.featured : temple.featured;
 
-      temple.dressCode = req.body.dressCode || temple.dressCode;
+    temple.dressCode = req.body.dressCode || temple.dressCode;
 
     temple.rating = req.body.rating || temple.rating;
 

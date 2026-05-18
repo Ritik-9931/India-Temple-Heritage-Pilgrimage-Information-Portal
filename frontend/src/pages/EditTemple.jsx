@@ -66,9 +66,15 @@ const EditTemple = () => {
 
   const [rating, setRating] = useState(4.5);
 
-  const [images, setImages] = useState([]);
+  /* =========================
+     IMAGE STATES
+  ========================= */
 
-  const [previewImages, setPreviewImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+
+  const [newImages, setNewImages] = useState([]);
+
+  const [newPreviewImages, setNewPreviewImages] = useState([]);
 
   /* =========================
      FETCH DATA
@@ -120,7 +126,7 @@ const EditTemple = () => {
 
       setRating(temple.rating || 4.5);
 
-      setPreviewImages(temple.images || []);
+      setExistingImages(temple.images || []);
     }
   }, [temple]);
 
@@ -133,17 +139,41 @@ const EditTemple = () => {
   }, [templeName]);
 
   /* =========================
-     HANDLE IMAGES
+     HANDLE NEW IMAGES
   ========================= */
 
   const handleImages = (e) => {
     const files = Array.from(e.target.files);
 
-    setImages((prev)=>[...prev, ...files]);
+    setNewImages((prev) => [...prev, ...files]);
 
     const previews = files.map((file) => URL.createObjectURL(file));
 
-    setPreviewImages((prev)=>[...prev, ...previews]);
+    setNewPreviewImages((prev) => [...prev, ...previews]);
+  };
+
+  /* =========================
+     REMOVE EXISTING IMAGE
+  ========================= */
+
+  const removeExistingImage = (indexToRemove) => {
+    setExistingImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+  };
+
+  /* =========================
+     REMOVE NEW IMAGE
+  ========================= */
+
+  const removeNewImage = (indexToRemove) => {
+    setNewPreviewImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+
+    setNewImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
   };
 
   /* =========================
@@ -197,6 +227,11 @@ const EditTemple = () => {
 
     formData.append("longitude", longitude);
 
+    formData.append(
+      "existingImages",
+      JSON.stringify(existingImages),
+    );
+
     festivals.split(",").forEach((festival) => {
       formData.append("festivals", festival.trim());
     });
@@ -205,7 +240,7 @@ const EditTemple = () => {
       formData.append("categories", category);
     });
 
-    images.forEach((img) => {
+    newImages.forEach((img) => {
       formData.append("images", img);
     });
 
@@ -248,7 +283,7 @@ const EditTemple = () => {
           </h1>
 
           <p className="text-gray-600 text-lg">
-            Edit temple information, architecture, history and images.
+            Edit temple information, history and images.
           </p>
         </div>
 
@@ -429,7 +464,9 @@ const EditTemple = () => {
               onChange={(e) => setFeatured(e.target.checked)}
             />
 
-            <label className="font-semibold text-lg">Featured Temple</label>
+            <label className="font-semibold text-lg">
+              Featured Temple
+            </label>
           </div>
 
           {/* IMAGE */}
@@ -443,7 +480,9 @@ const EditTemple = () => {
             <label className="border-2 border-dashed border-orange-300 p-10 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:bg-orange-50 transition">
               <ImagePlus size={50} className="text-orange-500 mb-4" />
 
-              <p className="text-lg font-semibold">Click to Upload Images</p>
+              <p className="text-lg font-semibold">
+                Click to Upload Images
+              </p>
 
               <input
                 type="file"
@@ -454,16 +493,47 @@ const EditTemple = () => {
               />
             </label>
 
-            {/* PREVIEW */}
+            {/* EXISTING IMAGES */}
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-6">
-              {previewImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt=""
-                  className="h-44 w-full object-cover rounded-2xl shadow-lg"
-                />
+              {existingImages.map((image, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={image}
+                    alt=""
+                    className="h-44 w-full object-cover rounded-2xl shadow-lg"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => removeExistingImage(index)}
+                    className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* NEW IMAGES */}
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-6">
+              {newPreviewImages.map((image, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={image}
+                    alt=""
+                    className="h-44 w-full object-cover rounded-2xl shadow-lg"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => removeNewImage(index)}
+                    className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full"
+                  >
+                    ×
+                  </button>
+                </div>
               ))}
             </div>
           </div>
