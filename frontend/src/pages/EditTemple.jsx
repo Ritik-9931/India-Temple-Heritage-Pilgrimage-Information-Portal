@@ -139,11 +139,11 @@ const EditTemple = () => {
   const handleImages = (e) => {
     const files = Array.from(e.target.files);
 
-    setImages(files);
+    setImages((prev)=>[...prev, ...files]);
 
     const previews = files.map((file) => URL.createObjectURL(file));
 
-    setPreviewImages(previews);
+    setPreviewImages((prev)=>[...prev, ...previews]);
   };
 
   /* =========================

@@ -191,7 +191,8 @@ export const updateTemple = async (req, res) => {
     let imageUrls = temple.images;
 
     if (req.files && req.files.length > 0) {
-      imageUrls = req.files.map((file) => file.path);
+      const newImages = req.files.map((file) => file.path);
+      imageUrls = [...temple.images, ...newImages]
     }
 
     /* =========================
