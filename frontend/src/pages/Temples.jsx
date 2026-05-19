@@ -42,7 +42,7 @@ const Temples = () => {
 
       const scrollPosition = window.innerHeight + window.scrollY;
 
-      if (scrollPosition >= mainBottom - 200 && !loading && page < totalPages) {
+      if (scrollPosition >= mainBottom - 700 && !loading && page < totalPages) {
         setPage((prev) => prev + 1);
       }
     };

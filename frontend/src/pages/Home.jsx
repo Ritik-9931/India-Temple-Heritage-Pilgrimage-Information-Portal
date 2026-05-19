@@ -21,13 +21,13 @@ const Home = () => {
 
   const { temples = [], loading, error } = useSelector((state) => state.temple);
 
-  const filterPilgrimage = temples?.filter((temple) =>
-    temple.categories?.includes("pilgrimage"),
-  );
+  const filterPilgrimage = temples
+    ?.filter((temple) => temple.categories?.includes("pilgrimage"))
+    ?.slice(0, 3);
 
-  const filterArchitecture = temples?.filter((temple) =>
-    temple.categories?.includes("architecture"),
-  );
+  const filterArchitecture = temples
+    ?.filter((temple) => temple.categories?.includes("architecture"))
+    ?.slice(0, 3);
 
   useEffect(() => {
     dispatch(fetchTemples({}));
@@ -220,7 +220,10 @@ const Home = () => {
                     {temple.templeName}
                   </h3>
 
-                  <button className="flex items-center gap-2 text-orange-500 font-semibold">
+                  <button
+                    onClick={() => navigate(`/templeDetails/${temple._id}`)}
+                    className="flex items-center gap-2 text-orange-500 font-semibold"
+                  >
                     Explore More
                     <ArrowRight size={18} />
                   </button>
