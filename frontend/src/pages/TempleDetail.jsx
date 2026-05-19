@@ -246,7 +246,7 @@ const TempleDetail = () => {
                     <div>
                       <p className="text-gray-500">Timing</p>
 
-                      <h3 className="font-semibold text-lg">{temple.timing}</h3>
+                      <h3 className="font-semibold text-lg">{temple.timings}</h3>
                     </div>
 
                     <div>
