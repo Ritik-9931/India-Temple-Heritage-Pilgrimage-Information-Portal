@@ -4,9 +4,9 @@ import axios from "axios";
    BASE URL
 ========================= */
 
-const BASE_URL = "http://localhost:5000/api";
-// "https://india-temple-heritage-pilgrimage.onrender.com/api";
+const BASE_URL = "https://india-temple-heritage-pilgrimage.onrender.com/api";
 
+// "http://localhost:5000/api";
 /* =========================
    AXIOS INSTANCE
 ========================= */
