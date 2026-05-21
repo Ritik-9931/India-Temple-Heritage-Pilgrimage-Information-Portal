@@ -61,7 +61,7 @@ export const updatePassword = async (req, res) => {
     const userExists = await User.findOne({ email });
 
     if (!userExists) {
-      return res.status(404)({
+      return res.status(404).json({
         success: false,
         message: "User not exists",
       });
@@ -75,12 +75,13 @@ export const updatePassword = async (req, res) => {
 
     await userExists.save();
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
 
       message: "Password Updated Successfully",
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       success: false,
       message: error.message,
@@ -134,6 +135,7 @@ export const sendOTP = async (req, res) => {
       message: "OTP send Successfully",
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       success: false,
       message: error.message,
@@ -177,6 +179,7 @@ export const verifyOTP = async (req, res) => {
       message: "OTP verified Successfully",
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       success: false,
       message: error.message,
