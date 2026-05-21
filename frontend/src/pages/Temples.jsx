@@ -132,7 +132,7 @@ const Temples = () => {
                 View Details
               </button>
 
-              {userInfo.role === "admin" && (
+              {userInfo?.role === "admin" && (
                 <button
                   onClick={() => navigate(`/admin/editTemple/${temple._id}`)}
                   className="mt-5 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition duration-300"
