@@ -15,6 +15,7 @@ const OTPSystem = () => {
   const sendOTP = async () => {
     if (loading) return;
     try {
+      console.log("hello")
       setLoading(true);
 
       const res = await API.post("/auth/send-otp", { email });
