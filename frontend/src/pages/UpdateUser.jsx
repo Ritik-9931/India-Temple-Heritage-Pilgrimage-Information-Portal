@@ -14,9 +14,8 @@ const UpdateUser = () => {
   const email = location.state?.email;
 
   const updatePassword = async () => {
+    if (loading) return;
     try {
-      if (loading) return;
-      
       setLoading(true);
 
       const res = await API.put("/auth/update-password", {
@@ -38,9 +37,7 @@ const UpdateUser = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 via-white to-yellow-100 px-4">
-      
       <div className="w-full max-w-md bg-white shadow-2xl rounded-3xl p-8">
-        
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-orange-600">
             Update Password

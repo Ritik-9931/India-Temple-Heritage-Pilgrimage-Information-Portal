@@ -13,9 +13,8 @@ const OTPSystem = () => {
   const [loading, setLoading] = useState(false);
 
   const sendOTP = async () => {
+    if (loading) return;
     try {
-      if (loading) return;
-
       setLoading(true);
 
       const res = await API.post("/auth/send-otp", { email });
@@ -31,9 +30,8 @@ const OTPSystem = () => {
   };
 
   const verifyOTP = async () => {
+    if (loading) return;
     try {
-      if (loading) return;
-      
       setLoading(true);
 
       const res = await API.post("/auth/verify-otp", {
