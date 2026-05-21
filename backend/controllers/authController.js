@@ -101,18 +101,20 @@ export const sendOTP = async (req, res) => {
       });
     }
 
+    console.log("user find");
     const otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
       lowerCaseAlphabets: false,
       specialChars: false,
     });
 
+    console.log("otp generate");
     user.otp = otp;
 
     user.otpExpire = Date.now() + 5 * 60 * 1000;
 
     await user.save();
-
+    console.log("otp saved");
     const html = `
       <div style="font-family:sans-serif;padding:20px">
         <h2>Email Verification</h2>
@@ -124,9 +126,9 @@ export const sendOTP = async (req, res) => {
         <p>This OTP will expire in 5 minutes.</p>
       </div>
     `;
-
+    console.log("mail ready");
     await sendEmail(email, "Your OTP Code", html);
-
+    console.log("mail send");
     res.status(200).json({
       success: true,
       message: "OTP send Successfully",
