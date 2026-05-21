@@ -17,11 +17,10 @@ const OTPSystem = () => {
     try {
       console.log("hello")
       setLoading(true);
-
+console.log("true")
       const res = await API.post("/auth/send-otp", { email });
-
+      console.log("call api")
       alert(res.data.message);
-
       setStep(2);
     } catch (error) {
       alert(error.response?.data?.message || "Something went wrong");
