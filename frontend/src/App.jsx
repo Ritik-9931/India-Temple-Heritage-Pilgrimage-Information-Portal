@@ -1,9 +1,6 @@
 // src/App.js
 import React from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -18,6 +15,9 @@ import CreateTemple from "./pages/CreateTemple";
 import Category from "./pages/Category";
 import EditTemple from "./pages/EditTemple";
 import TempleDetail from "./pages/TempleDetail";
+import UpdateUser from "./pages/UpdateUser";
+import OTPSystem from "./components/OTPSystem";
+import OTPProtectedRoute from "./routes/OTPProtectedRoute";
 
 const App = () => {
   const myroute = createBrowserRouter([
@@ -55,30 +55,45 @@ const App = () => {
         },
         {
           path: "admin/upload",
-          element:
-          <AdminRoute>
-            <CreateTemple />
-          </AdminRoute>
+          element: (
+            <AdminRoute>
+              <CreateTemple />
+            </AdminRoute>
+          ),
         },
         {
           path: "admin/category",
-          element:
-          <AdminRoute>
-            <Category />
-          </AdminRoute>
+          element: (
+            <AdminRoute>
+              <Category />
+            </AdminRoute>
+          ),
         },
         {
           path: "admin/editTemple/:id",
-          element: 
-          <AdminRoute>
-            <EditTemple />
-          </AdminRoute>
+          element: (
+            <AdminRoute>
+              <EditTemple />
+            </AdminRoute>
+          ),
         },
         {
           path: "/templeDetails/:id",
-          element: <TempleDetail />
-        }
+          element: <TempleDetail />,
+        },
       ],
+    },
+    {
+      path: "otp-generate",
+      element: <OTPSystem />,
+    },
+    {
+      path: "updatePass",
+      element: (
+        <OTPProtectedRoute>
+          <UpdateUser />
+        </OTPProtectedRoute>
+      ),
     },
   ]);
 

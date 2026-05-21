@@ -4,9 +4,9 @@ import axios from "axios";
    BASE URL
 ========================= */
 
-const BASE_URL =
-  "https://india-temple-heritage-pilgrimage.onrender.com/api";
+const BASE_URL = "https://india-temple-heritage-pilgrimage.onrender.com/api";
 
+// "http://localhost:5000/api";
 /* =========================
    AXIOS INSTANCE
 ========================= */
@@ -21,18 +21,12 @@ const API = axios.create({
 
 API.interceptors.request.use(
   (config) => {
-    const userInfo =
-      localStorage.getItem(
-        "userInfo"
-      );
+    const userInfo = localStorage.getItem("userInfo");
 
     if (userInfo) {
-      const token = JSON.parse(
-        userInfo
-      ).token;
+      const token = JSON.parse(userInfo).token;
 
-      config.headers.Authorization =
-        `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
@@ -40,7 +34,7 @@ API.interceptors.request.use(
 
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 export default API;

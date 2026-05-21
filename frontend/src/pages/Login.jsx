@@ -2,15 +2,9 @@ import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  loginUser,
-  setCredentials,
-} from "../redux/slices/authSlice";
+import { loginUser, setCredentials } from "../redux/slices/authSlice";
 
-import {
-  useNavigate,
-  Link,
-} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -21,19 +15,11 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const {
-    loading,
-    error,
-    userInfo,
-  } = useSelector(
-    (state) => state.auth,
-  );
+  const { loading, error, userInfo } = useSelector((state) => state.auth);
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
   /* =========================
      LOGIN
@@ -56,9 +42,7 @@ const Login = () => {
 
   useEffect(() => {
     if (userInfo) {
-      toast.success(
-        "Login Successful 🎉",
-      );
+      toast.success("Login Successful 🎉");
 
       navigate("/");
     }
@@ -85,11 +69,8 @@ const Login = () => {
           </h1>
 
           <p className="text-base text-orange-100 leading-7">
-            Explore sacred
-            temples, discover
-            spiritual places, and
-            continue your divine
-            journey.
+            Explore sacred temples, discover spiritual places, and continue your
+            divine journey.
           </p>
 
           <img
@@ -102,20 +83,13 @@ const Login = () => {
         {/* ================= RIGHT ================= */}
 
         <div className="p-6 md:p-8 flex flex-col justify-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
-            Login
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Login</h2>
 
-          <p className="text-gray-500 mb-6">
-            Sign in to your account
-          </p>
+          <p className="text-gray-500 mb-6">Sign in to your account</p>
 
           {/* ================= FORM ================= */}
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4"
-          >
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* EMAIL */}
 
             <div>
@@ -127,11 +101,7 @@ const Login = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) =>
-                  setEmail(
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-gray-300 rounded-2xl p-3 outline-none focus:ring-2 focus:ring-orange-400"
                 required
               />
@@ -148,15 +118,21 @@ const Login = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) =>
-                  setPassword(
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded-2xl p-3 outline-none focus:ring-2 focus:ring-orange-400"
                 required
               />
             </div>
+
+            <p className="text-right text-sm">
+              Forgot your password?{" "}
+              <b
+                className="cursor-pointer text-blue-800"
+                onClick={() => navigate(`/otp-generate`)}
+              >
+                Reset Password
+              </b>
+            </p>
 
             {/* BUTTON */}
 
@@ -164,9 +140,7 @@ const Login = () => {
               type="submit"
               className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-2xl font-bold text-base transition duration-300"
             >
-              {loading
-                ? "Loading..."
-                : "Login"}
+              {loading ? "Loading..." : "Login"}
             </button>
           </form>
 
@@ -175,9 +149,7 @@ const Login = () => {
           <div className="flex items-center my-6">
             <div className="flex-1 h-[1px] bg-gray-300"></div>
 
-            <span className="px-4 text-gray-400 text-sm">
-              OR CONTINUE WITH
-            </span>
+            <span className="px-4 text-gray-400 text-sm">OR CONTINUE WITH</span>
 
             <div className="flex-1 h-[1px] bg-gray-300"></div>
           </div>
@@ -186,74 +158,46 @@ const Login = () => {
 
           <div className="flex justify-center">
             <GoogleLogin
-              onSuccess={async (
-                credentialResponse,
-              ) => {
+              onSuccess={async (credentialResponse) => {
                 try {
-                  const res =
-                    await fetch(
-                      "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
-                      {
-                        method: "POST",
+                  const res = await fetch(
+                    "https://india-temple-heritage-pilgrimage.onrender.com/api/users/google",
+                    {
+                      method: "POST",
 
-                        headers: {
-                          "Content-Type":
-                            "application/json",
-                        },
-
-                        body: JSON.stringify(
-                          {
-                            token:
-                              credentialResponse.credential,
-                          },
-                        ),
+                      headers: {
+                        "Content-Type": "application/json",
                       },
-                    );
 
-                  const data =
-                    await res.json();
+                      body: JSON.stringify({
+                        token: credentialResponse.credential,
+                      }),
+                    },
+                  );
+
+                  const data = await res.json();
 
                   if (!res.ok) {
-                    toast.error(
-                      data.message ||
-                        "Google Login Failed",
-                    );
+                    toast.error(data.message || "Google Login Failed");
 
                     return;
                   }
 
-                  localStorage.setItem(
-                    "userInfo",
-                    JSON.stringify(
-                      data,
-                    ),
-                  );
+                  localStorage.setItem("userInfo", JSON.stringify(data));
 
-                  dispatch(
-                    setCredentials(
-                      data,
-                    ),
-                  );
+                  dispatch(setCredentials(data));
 
-                  toast.success(
-                    "Login Successful 🎉",
-                  );
+                  toast.success("Login Successful 🎉");
 
                   navigate("/");
                 } catch (error) {
-                  console.log(
-                    error,
-                  );
+                  console.log(error);
 
-                  toast.error(
-                    "Something went wrong",
-                  );
+                  toast.error("Something went wrong");
                 }
               }}
               onError={() => {
-                toast.error(
-                  "Google Login Failed",
-                );
+                toast.error("Google Login Failed");
               }}
             />
           </div>
@@ -261,12 +205,8 @@ const Login = () => {
           {/* ================= REGISTER LINK ================= */}
 
           <p className="mt-6 text-center text-gray-600 text-sm">
-            Don't have an
-            account?
-            <Link
-              to="/register"
-              className="text-orange-500 font-semibold ml-2"
-            >
+            Don't have an account?
+            <Link to="/register" className="text-orange-500 font-semibold ml-2">
               Register
             </Link>
           </p>
