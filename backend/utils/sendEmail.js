@@ -1,8 +1,31 @@
 import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 
 const sendEmail = async (to, subject, html) => {
+  // If SENDGRID_API_KEY is set, prefer SendGrid (works reliably from cloud hosts)
+  if (process.env.SENDGRID_API_KEY) {
+    try {
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+      const msg = {
+        to,
+        from: process.env.SENDGRID_FROM || process.env.EMAIL_USER,
+        subject,
+        html,
+      };
+
+      const res = await sgMail.send(msg);
+      console.log("SendGrid email sent:", res && res[0] && res[0].statusCode);
+      return;
+    } catch (err) {
+      console.error("SendGrid send failed:", err);
+      throw new Error("SendGrid email send failed: " + (err.message || err));
+    }
+  }
+
+  // Fallback to nodemailer if SendGrid isn't configured
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    throw new Error("Email service is not configured. Set EMAIL_USER and EMAIL_PASS.");
+    throw new Error("Email service is not configured. Set SENDGRID_API_KEY or EMAIL_USER and EMAIL_PASS.");
   }
 
   const transporter = nodemailer.createTransport({
