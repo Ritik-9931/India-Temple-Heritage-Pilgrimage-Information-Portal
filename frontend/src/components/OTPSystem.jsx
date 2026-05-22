@@ -14,16 +14,20 @@ const OTPSystem = () => {
 
   const sendOTP = async () => {
     if (loading) return;
+    
+    if (!email) {
+      alert("Please enter your email address.");
+      return;
+    }
+
     try {
-      console.log("hello")
       setLoading(true);
-console.log("true")
       const res = await API.post("/auth/sendOTP", { email });
-      console.log("call api")
       alert(res.data.message);
       setStep(2);
     } catch (error) {
-      alert(error.response?.data?.message || "Something went wrong");
+      console.error("sendOTP error:", error);
+      alert(error.response?.data?.message || error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
