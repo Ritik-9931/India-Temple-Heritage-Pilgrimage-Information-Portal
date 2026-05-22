@@ -81,7 +81,7 @@ export const updatePassword = async (req, res) => {
       message: "Password Updated Successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -95,13 +95,14 @@ export const sendOTP = async (req, res) => {
 
     const user = await User.findOne({ email });
 
+    console.log("try find user");
+
     if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
-
     console.log("user find");
     const otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
@@ -135,7 +136,7 @@ export const sendOTP = async (req, res) => {
       message: "OTP send Successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -179,7 +180,7 @@ export const verifyOTP = async (req, res) => {
       message: "OTP verified Successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,
