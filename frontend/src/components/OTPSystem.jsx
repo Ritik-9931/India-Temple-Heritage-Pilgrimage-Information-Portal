@@ -18,7 +18,7 @@ const OTPSystem = () => {
       console.log("hello")
       setLoading(true);
 console.log("true")
-      const res = await API.post("/auth/send-otp", { email });
+      const res = await API.post("/auth/sendOTP", { email });
       console.log("call api")
       alert(res.data.message);
       setStep(2);
@@ -34,7 +34,7 @@ console.log("true")
     try {
       setLoading(true);
 
-      const res = await API.post("/auth/verify-otp", {
+      const res = await API.post("/auth/verifyOTP", {
         email,
         otp,
       });

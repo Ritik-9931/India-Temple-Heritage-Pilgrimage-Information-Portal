@@ -19,10 +19,10 @@ router.post("/login", loginUser);
 
 router.get("/profile", protect, getUserProfile);
 
-router.post("/send-otp", sendOTP);
+router.post("/sendOTP", sendOTP);
 
-router.post("/verify-otp", verifyOTP);
+router.post("/verifyOTP", verifyOTP);
 
-router.put("/update-password", updatePassword);
+router.put("/updatePassword", updatePassword);
 
 export default router;

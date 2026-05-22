@@ -18,7 +18,7 @@ const UpdateUser = () => {
     try {
       setLoading(true);
 
-      const res = await API.put("/auth/update-password", {
+      const res = await API.put("/auth/updatePassword", {
         email,
         password,
       });
