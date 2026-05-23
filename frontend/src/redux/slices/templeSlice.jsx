@@ -9,15 +9,26 @@ import API from "../../services/api";
 export const fetchTemples = createAsyncThunk(
   "temple/fetchTemples",
 
-  async ({ page = 1, keyword = "", category = "", state = "" }, thunkAPI) => {
+  async (
+    {
+      page = 1,
+      keyword = "",
+      category = "",
+      state = "",
+      pilgrimage = "",
+    },
+    thunkAPI,
+  ) => {
     try {
       const { data } = await API.get(
-        `/temples?page=${page}&keyword=${keyword}&category=${category}&state=${state}`,
+        `/temples?page=${page}&keyword=${keyword}&category=${category}&state=${state}&pilgrimage=${pilgrimage}`,
       );
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch temples",
+      );
     }
   },
 );
@@ -35,7 +46,9 @@ export const fetchTempleById = createAsyncThunk(
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch temple",
+      );
     }
   },
 );
@@ -57,7 +70,9 @@ export const createTemple = createAsyncThunk(
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to create temple",
+      );
     }
   },
 );
@@ -79,7 +94,9 @@ export const updateTemple = createAsyncThunk(
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update temple",
+      );
     }
   },
 );
@@ -97,7 +114,9 @@ export const deleteTemple = createAsyncThunk(
 
       return id;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete temple",
+      );
     }
   },
 );
@@ -139,16 +158,22 @@ const templeSlice = createSlice({
     clearTempleSuccess: (state) => {
       state.success = false;
     },
+
+    clearSingleTemple: (state) => {
+      state.temple = null;
+    },
   },
 
   extraReducers: (builder) => {
     /* =========================
-         FETCH TEMPLES
-      ========================= */
+       FETCH TEMPLES
+    ========================= */
 
     builder
       .addCase(fetchTemples.pending, (state) => {
         state.loading = true;
+
+        state.error = null;
       })
 
       .addCase(fetchTemples.fulfilled, (state, action) => {
@@ -157,7 +182,10 @@ const templeSlice = createSlice({
         if (action.payload.page === 1) {
           state.temples = action.payload.temples;
         } else {
-          state.temples = [...state.temples, ...action.payload.temples];
+          state.temples = [
+            ...state.temples,
+            ...action.payload.temples,
+          ];
         }
 
         state.page = action.payload.page;
@@ -172,12 +200,14 @@ const templeSlice = createSlice({
       });
 
     /* =========================
-         FETCH SINGLE TEMPLE
-      ========================= */
+       FETCH SINGLE TEMPLE
+    ========================= */
 
     builder
       .addCase(fetchTempleById.pending, (state) => {
         state.loading = true;
+
+        state.error = null;
       })
 
       .addCase(fetchTempleById.fulfilled, (state, action) => {
@@ -193,12 +223,16 @@ const templeSlice = createSlice({
       });
 
     /* =========================
-         CREATE TEMPLE
-      ========================= */
+       CREATE TEMPLE
+    ========================= */
 
     builder
       .addCase(createTemple.pending, (state) => {
         state.loading = true;
+
+        state.error = null;
+
+        state.success = false;
       })
 
       .addCase(createTemple.fulfilled, (state, action) => {
@@ -216,12 +250,16 @@ const templeSlice = createSlice({
       });
 
     /* =========================
-         UPDATE TEMPLE
-      ========================= */
+       UPDATE TEMPLE
+    ========================= */
 
     builder
       .addCase(updateTemple.pending, (state) => {
         state.loading = true;
+
+        state.error = null;
+
+        state.success = false;
       })
 
       .addCase(updateTemple.fulfilled, (state, action) => {
@@ -230,7 +268,9 @@ const templeSlice = createSlice({
         state.success = true;
 
         state.temples = state.temples.map((temple) =>
-          temple._id === action.payload._id ? action.payload : temple,
+          temple._id === action.payload._id
+            ? action.payload
+            : temple,
         );
 
         state.temple = action.payload;
@@ -243,12 +283,14 @@ const templeSlice = createSlice({
       });
 
     /* =========================
-         DELETE TEMPLE
-      ========================= */
+       DELETE TEMPLE
+    ========================= */
 
     builder
       .addCase(deleteTemple.pending, (state) => {
         state.loading = true;
+
+        state.error = null;
       })
 
       .addCase(deleteTemple.fulfilled, (state, action) => {
@@ -271,6 +313,10 @@ const templeSlice = createSlice({
    EXPORTS
 ========================= */
 
-export const { clearTempleError, clearTempleSuccess } = templeSlice.actions;
+export const {
+  clearTempleError,
+  clearTempleSuccess,
+  clearSingleTemple,
+} = templeSlice.actions;
 
 export default templeSlice.reducer;

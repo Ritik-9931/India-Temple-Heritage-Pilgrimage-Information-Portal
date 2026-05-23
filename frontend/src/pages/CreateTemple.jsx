@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -14,7 +13,16 @@ import {
 
 import { fetchCategories } from "../redux/slices/categorySlice";
 
-import { Upload, ImagePlus, MapPin, Pencil, Trash2, Star } from "lucide-react";
+import {
+  Upload,
+  ImagePlus,
+  MapPin,
+  Pencil,
+  Trash2,
+  Star,
+  ScrollText,
+  Clock,
+} from "lucide-react";
 
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -36,48 +44,49 @@ const CreateTemple = () => {
   ========================= */
 
   const [templeName, setTempleName] = useState("");
-
   const [slug, setSlug] = useState("");
-
   const [deity, setDeity] = useState("");
-
   const [stateName, setStateName] = useState("");
-
   const [city, setCity] = useState("");
-
   const [address, setAddress] = useState("");
-
   const [history, setHistory] = useState("");
-
   const [architectureStyle, setArchitectureStyle] = useState("");
-
   const [dynasty, setDynasty] = useState("");
-
   const [builtYear, setBuiltYear] = useState("");
-
   const [darshanTimings, setDarshanTimings] = useState("");
-
   const [visitorGuidelines, setVisitorGuidelines] = useState("");
-
-  const [latitude, setLatitude] = useState("");
-
-  const [longitude, setLongitude] = useState("");
-
-  const [festivals, setFestivals] = useState("");
-
-  const [rituals, setRituals] = useState("");
-
-  const [categories, setCategories] = useState([]);
-
-  const [featured, setFeatured] = useState(false);
-
   const [dressCode, setDressCode] = useState("");
-
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [festivals, setFestivals] = useState("");
+  const [rituals, setRituals] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [featured, setFeatured] = useState(false);
   const [rating, setRating] = useState(4.5);
 
   const [images, setImages] = useState([]);
-
   const [previewImages, setPreviewImages] = useState([]);
+
+  const [pilgrimageCircuits, setPilgrimageCircuits] = useState([]);
+
+  /* =========================
+     PILGRIMAGE OPTIONS
+  ========================= */
+
+  const pilgrimageOptions = [
+    "Char Dham",
+    "Chota Char Dham",
+    "Jyotirlinga",
+    "Shakti Peeth",
+    "Sapta Puri",
+    "Panch Kedar",
+    "Pancha Bhoota Sthalams",
+    "Divya Desam",
+    "Ashtavinayak",
+    "Kanwar Yatra",
+    "Amarnath Yatra",
+    "Kumbh Mela Circuit",
+  ];
 
   /* =========================
      FETCH DATA
@@ -85,7 +94,6 @@ const CreateTemple = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-
     dispatch(fetchTemples({}));
   }, [dispatch]);
 
@@ -106,44 +114,27 @@ const CreateTemple = () => {
   useEffect(() => {
     if (temple && id) {
       setTempleName(temple.templeName || "");
-
       setSlug(temple.slug || "");
-
       setDeity(temple.deity || "");
-
       setStateName(temple.state || "");
-
       setCity(temple.city || "");
-
-      setHistory(temple.history || "");
-
-      setArchitectureStyle(temple.architectureStyle || "");
-
-      setDynasty(temple.dynasty || "");
-
-      setBuiltYear(temple.builtYear || "");
-
       setAddress(temple.address || "");
-
+      setHistory(temple.history || "");
+      setArchitectureStyle(temple.architectureStyle || "");
+      setDynasty(temple.dynasty || "");
+      setBuiltYear(temple.builtYear || "");
       setDarshanTimings(temple.darshanTimings || "");
-
       setVisitorGuidelines(temple.visitorGuidelines || "");
-
-      setRituals(temple.rituals?.join(", ") || "");
-
-      setLatitude(temple.location?.latitude || "");
-
-      setLongitude(temple.location?.longitude || "");
-
-      setFestivals(temple.festivals?.join(", ") || "");
-
       setDressCode(temple.dressCode || "");
-
+      setLatitude(temple.location?.latitude || "");
+      setLongitude(temple.location?.longitude || "");
+      setFestivals(temple.festivals?.join(", ") || "");
+      setRituals(temple.rituals?.join(", ") || "");
       setCategories(temple.categories || []);
-
       setFeatured(temple.featured || false);
-
       setRating(temple.rating || 4.5);
+
+      setPilgrimageCircuits(temple.pilgrimageCircuits || []);
 
       if (temple.images) {
         setPreviewImages(temple.images.map((img) => img.url || img));
@@ -156,7 +147,7 @@ const CreateTemple = () => {
   ========================= */
 
   useEffect(() => {
-    setSlug(templeName.toLowerCase().replace(/\s+/g, "-"));
+    setSlug(templeName.toLowerCase().trim().replace(/\s+/g, "-"));
   }, [templeName]);
 
   /* =========================
@@ -172,6 +163,46 @@ const CreateTemple = () => {
   };
 
   /* =========================
+     HANDLE PILGRIMAGE
+  ========================= */
+
+  const handlePilgrimage = (item) => {
+    if (pilgrimageCircuits.includes(item)) {
+      setPilgrimageCircuits(
+        pilgrimageCircuits.filter((circuit) => circuit !== item),
+      );
+    } else {
+      setPilgrimageCircuits([...pilgrimageCircuits, item]);
+    }
+  };
+
+  /* =========================
+     HANDLE IMAGES
+  ========================= */
+
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+
+    setImages((prev) => [...prev, ...files]);
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+
+    setPreviewImages((prev) => [...prev, ...previews]);
+  };
+
+  /* =========================
+     REMOVE IMAGE
+  ========================= */
+
+  const removeImage = (indexToRemove) => {
+    setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
+
+    setPreviewImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+  };
+
+  /* =========================
      SUBMIT
   ========================= */
 
@@ -181,49 +212,43 @@ const CreateTemple = () => {
     const formData = new FormData();
 
     formData.append("templeName", templeName);
-
     formData.append("slug", slug);
-
     formData.append("deity", deity);
-
     formData.append("state", stateName);
-
     formData.append("city", city);
-
-    formData.append("history", history);
-
-    formData.append("architectureStyle", architectureStyle);
-
-    formData.append("dynasty", dynasty);
-
-    formData.append("builtYear", builtYear);
-
     formData.append("address", address);
-
+    formData.append("history", history);
+    formData.append("architectureStyle", architectureStyle);
+    formData.append("dynasty", dynasty);
+    formData.append("builtYear", builtYear);
     formData.append("darshanTimings", darshanTimings);
-
     formData.append("visitorGuidelines", visitorGuidelines);
-
-    formData.append("featured", featured);
-
     formData.append("dressCode", dressCode);
-
+    formData.append("featured", featured);
     formData.append("rating", rating);
-
     formData.append("latitude", latitude);
-
     formData.append("longitude", longitude);
 
-    festivals.split(",").forEach((festival) => {
-      formData.append("festivals", festival.trim());
-    });
+    festivals
+      .split(",")
+      .filter((item) => item.trim() !== "")
+      .forEach((festival) => {
+        formData.append("festivals", festival.trim());
+      });
 
-    rituals.split(",").forEach((ritual) => {
-      formData.append("rituals", ritual.trim());
-    });
+    rituals
+      .split(",")
+      .filter((item) => item.trim() !== "")
+      .forEach((ritual) => {
+        formData.append("rituals", ritual.trim());
+      });
 
     categories.forEach((category) => {
       formData.append("categories", category);
+    });
+
+    pilgrimageCircuits.forEach((item) => {
+      formData.append("pilgrimageCircuits", item);
     });
 
     images.forEach((img) => {
@@ -255,39 +280,12 @@ const CreateTemple = () => {
   };
 
   /* =========================
-   HANDLE IMAGES
-========================= */
-
-  const handleImages = (e) => {
-    const files = Array.from(e.target.files);
-
-    setImages((prev) => [...prev, ...files]);
-
-    const previews = files.map((file) => URL.createObjectURL(file));
-
-    setPreviewImages((prev) => [...prev, ...previews]);
-  };
-
-  /* =========================
-   REMOVE IMAGE
-========================= */
-
-  const removeImage = (indexToRemove) => {
-    setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
-
-    setPreviewImages((prev) =>
-      prev.filter((_, index) => index !== indexToRemove),
-    );
-  };
-
-  /* =========================
      SUCCESS / ERROR
   ========================= */
 
   useEffect(() => {
     if (error) {
       alert(error);
-
       dispatch(clearTempleError());
     }
 
@@ -304,19 +302,20 @@ const CreateTemple = () => {
         setDeity("");
         setStateName("");
         setCity("");
+        setAddress("");
         setHistory("");
         setArchitectureStyle("");
         setDynasty("");
         setBuiltYear("");
-        setAddress("");
         setDarshanTimings("");
         setVisitorGuidelines("");
-        setRituals("");
+        setDressCode("");
         setLatitude("");
         setLongitude("");
         setFestivals("");
-        setDressCode("");
+        setRituals("");
         setCategories([]);
+        setPilgrimageCircuits([]);
         setFeatured(false);
         setRating(4.5);
         setImages([]);
@@ -330,9 +329,7 @@ const CreateTemple = () => {
   return (
     <div className="min-h-screen bg-orange-50 py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* =========================
-           FORM
-        ========================= */}
+        {/* FORM */}
 
         <div className="bg-white rounded-[40px] shadow-2xl p-10 mb-16">
           <div className="text-center mb-12">
@@ -341,7 +338,7 @@ const CreateTemple = () => {
             </h1>
 
             <p className="text-gray-600 text-lg">
-              Manage temple heritage, architecture, pilgrimage and images.
+              Manage temple heritage, pilgrimage and architecture.
             </p>
           </div>
 
@@ -449,21 +446,37 @@ const CreateTemple = () => {
 
             {/* HISTORY */}
 
-            <textarea
-              rows="7"
-              placeholder="Temple History"
-              value={history}
-              onChange={(e) => setHistory(e.target.value)}
-              className="w-full border p-5 rounded-2xl"
-            ></textarea>
+            <div>
+              <label className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <ScrollText />
+                Temple History
+              </label>
 
-            <textarea
-              rows="5"
-              placeholder="Visitor Guidelines"
-              value={visitorGuidelines}
-              onChange={(e) => setVisitorGuidelines(e.target.value)}
-              className="w-full border p-5 rounded-2xl"
-            ></textarea>
+              <textarea
+                rows="7"
+                placeholder="Temple History"
+                value={history}
+                onChange={(e) => setHistory(e.target.value)}
+                className="w-full border p-5 rounded-2xl"
+              ></textarea>
+            </div>
+
+            {/* VISITOR GUIDELINES */}
+
+            <div>
+              <label className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <Clock />
+                Visitor Guidelines
+              </label>
+
+              <textarea
+                rows="5"
+                placeholder="Visitor Guidelines"
+                value={visitorGuidelines}
+                onChange={(e) => setVisitorGuidelines(e.target.value)}
+                className="w-full border p-5 rounded-2xl"
+              ></textarea>
+            </div>
 
             {/* LOCATION */}
 
@@ -498,11 +511,13 @@ const CreateTemple = () => {
 
             <input
               type="text"
-              placeholder="Festivals"
+              placeholder="Festivals (comma separated)"
               value={festivals}
               onChange={(e) => setFestivals(e.target.value)}
               className="w-full border p-4 rounded-2xl"
             />
+
+            {/* RITUALS */}
 
             <input
               type="text"
@@ -511,6 +526,29 @@ const CreateTemple = () => {
               onChange={(e) => setRituals(e.target.value)}
               className="w-full border p-4 rounded-2xl"
             />
+
+            {/* PILGRIMAGE CIRCUITS */}
+
+            <div>
+              <h3 className="text-2xl font-bold mb-5">Pilgrimage Circuits</h3>
+
+              <div className="flex flex-wrap gap-4">
+                {pilgrimageOptions.map((item, index) => (
+                  <button
+                    type="button"
+                    key={index}
+                    onClick={() => handlePilgrimage(item)}
+                    className={`px-5 py-3 rounded-full border transition ${
+                      pilgrimageCircuits.includes(item)
+                        ? "bg-orange-500 text-white border-orange-500"
+                        : "bg-white"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* CATEGORIES */}
 
@@ -547,7 +585,7 @@ const CreateTemple = () => {
               <label className="font-semibold text-lg">Featured Temple</label>
             </div>
 
-            {/* IMAGE */}
+            {/* IMAGES */}
 
             <div>
               <label className="flex items-center gap-3 text-2xl font-bold mb-5">
@@ -555,13 +593,19 @@ const CreateTemple = () => {
                 Upload Images
               </label>
 
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImages}
-                className="w-full border p-4 rounded-2xl"
-              />
+              <label className="border-2 border-dashed border-orange-300 p-10 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:bg-orange-50 transition">
+                <ImagePlus size={50} className="text-orange-500 mb-4" />
+
+                <p className="text-lg font-semibold">Click to Upload Images</p>
+
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImages}
+                  className="hidden"
+                />
+              </label>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-6">
                 {previewImages.map((image, index) => (
@@ -575,7 +619,7 @@ const CreateTemple = () => {
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg font-bold"
+                      className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full"
                     >
                       ×
                     </button>
@@ -586,7 +630,14 @@ const CreateTemple = () => {
 
             {/* BUTTON */}
 
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-5 rounded-2xl text-xl font-bold flex items-center justify-center gap-3 transition duration-300">
+            <button
+              disabled={loading}
+              className={`w-full py-5 rounded-2xl text-xl font-bold flex items-center justify-center gap-3 transition duration-300 ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-orange-500 hover:bg-orange-600 text-white"
+              }`}
+            >
               <Upload size={24} />
 
               {loading
@@ -598,9 +649,7 @@ const CreateTemple = () => {
           </form>
         </div>
 
-        {/* =========================
-           TEMPLE CARDS
-        ========================= */}
+        {/* TEMPLE CARDS */}
 
         <div>
           <h2 className="text-4xl font-black mb-10 text-center">
@@ -625,7 +674,6 @@ const CreateTemple = () => {
 
                     <div className="flex items-center gap-1 text-orange-500">
                       <Star size={18} />
-
                       <span>{temple.rating}</span>
                     </div>
                   </div>
@@ -638,13 +686,28 @@ const CreateTemple = () => {
                     {temple.history}
                   </p>
 
-                  <div className="flex flex-wrap gap-2 mb-5">
+                  {/* CATEGORIES */}
+
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {temple.categories?.map((category, index) => (
                       <span
                         key={index}
                         className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm"
                       >
                         {category}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* PILGRIMAGE */}
+
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {temple.pilgrimageCircuits?.map((item, index) => (
+                      <span
+                        key={index}
+                        className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm"
+                      >
+                        {item}
                       </span>
                     ))}
                   </div>

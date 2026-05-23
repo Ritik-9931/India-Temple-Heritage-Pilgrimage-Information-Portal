@@ -36,7 +36,7 @@ const Home = () => {
   }, [dispatch]);
 
   /* =========================
-     FILTER TEMPLES
+     SEARCH FILTER
   ========================= */
 
   const filteredSuggestions = temples
@@ -51,13 +51,26 @@ const Home = () => {
     })
     .slice(0, 5);
 
-  const filterPilgrimage = temples
-    ?.filter((temple) => temple.categories?.includes("pilgrimage"))
-    ?.slice(0, 3);
+  /* =========================
+     PILGRIMAGE TYPES
+  ========================= */
+
+  const pilgrimageTypes = [
+    "Char Dham",
+    "Jyotirlinga",
+    "Shakti Peeth",
+    "Divya Desam",
+  ];
+
+  /* =========================
+     ARCHITECTURE TEMPLES
+  ========================= */
 
   const filterArchitecture = temples
-    ?.filter((temple) => temple.categories?.includes("architecture"))
-    ?.slice(0, 3);
+    ?.filter((temple) =>
+      temple.categories?.includes("architecture"),
+    )
+    ?.slice(0, 6);
 
   return (
     <div className="bg-[#f8f5f0] overflow-hidden">
@@ -65,8 +78,6 @@ const Home = () => {
 
       {userInfo?.role === "admin" && (
         <div className="fixed top-38 right-6 z-50 flex flex-col gap-4">
-          {/* CREATE TEMPLE */}
-
           <button
             onClick={() => navigate("/admin/upload")}
             className="group flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-6 py-4 rounded-2xl shadow-2xl transition duration-300 hover:scale-105"
@@ -85,8 +96,6 @@ const Home = () => {
               </p>
             </div>
           </button>
-
-          {/* CREATE CATEGORY */}
 
           <button
             onClick={() => navigate("/admin/category")}
@@ -109,9 +118,9 @@ const Home = () => {
         </div>
       )}
 
-      {/* ================= SEARCH BAR ================= */}
+      {/* ================= SEARCH ================= */}
 
-      <div className="relative max-w-2xl mx-auto py-1 px-6 z-50">
+      <div className="relative max-w-2xl mx-auto py-6 px-6 z-50">
         <div className="bg-white rounded-2xl shadow-xl flex items-center overflow-hidden border border-gray-200">
           <div className="px-4 text-gray-400">
             <Search size={22} />
@@ -119,14 +128,12 @@ const Home = () => {
 
           <input
             type="text"
-            placeholder="Search temple or state..."
+            placeholder="Search temple, city or state..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full py-4 outline-none text-gray-700"
           />
         </div>
-
-        {/* SEARCH SUGGESTIONS */}
 
         {search.trim() !== "" && (
           <div className="absolute left-6 right-6 mt-2 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
@@ -157,7 +164,7 @@ const Home = () => {
         )}
       </div>
 
-      {/* ================= HERO SECTION ================= */}
+      {/* ================= HERO ================= */}
 
       <section className="relative h-screen w-full">
         <img
@@ -178,9 +185,8 @@ const Home = () => {
           </h1>
 
           <p className="max-w-3xl text-lg md:text-2xl text-gray-200 mt-8 leading-9">
-            Explore sacred pilgrimage destinations, ancient temple
-            architecture, spiritual culture, and divine heritage from
-            across India.
+            Explore sacred pilgrimage destinations, ancient
+            architecture, divine culture, and spiritual heritage.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 mt-10">
@@ -198,7 +204,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= ABOUT SECTION ================= */}
+      {/* ================= ABOUT ================= */}
 
       <section className="max-w-7xl mx-auto px-6 py-24">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -213,8 +219,7 @@ const Home = () => {
 
             <p className="text-gray-600 text-lg leading-8 mb-8">
               India is home to thousands of ancient temples,
-              pilgrimage circuits, spiritual legends, and
-              architectural masterpieces.
+              pilgrimage circuits, and architectural marvels.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-6">
@@ -229,8 +234,8 @@ const Home = () => {
                 </h3>
 
                 <p className="text-gray-600 leading-7">
-                  Visit sacred destinations like Char Dham,
-                  Jyotirlinga, and Shakti Peeth temples.
+                  Explore Char Dham, Jyotirlinga and sacred
+                  pilgrimage destinations.
                 </p>
               </div>
 
@@ -241,18 +246,16 @@ const Home = () => {
                 />
 
                 <h3 className="text-2xl font-bold mb-3">
-                  Ancient Architecture
+                  Temple Architecture
                 </h3>
 
                 <p className="text-gray-600 leading-7">
-                  Explore magnificent temple carvings and
-                  historical wonders.
+                  Discover ancient carvings and stunning
+                  architectural wonders.
                 </p>
               </div>
             </div>
           </div>
-
-          {/* RIGHT IMAGE */}
 
           <div className="relative">
             <img
@@ -278,61 +281,94 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= PILGRIMAGE SECTION ================= */}
+      {/* ================= PILGRIMAGE SECTIONS ================= */}
 
-      <section className="bg-white py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-orange-500 uppercase tracking-[4px] font-semibold mb-3">
-              Sacred Pilgrimage
-            </p>
+      {pilgrimageTypes.map((type) => {
+        const templesByType = temples
+          ?.filter((temple) =>
+            temple.pilgrimageCircuits?.includes(type),
+          )
+          ?.slice(0, 3);
 
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900">
-              Famous Pilgrimage Temples
-            </h2>
-          </div>
+        if (templesByType.length === 0) return null;
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filterPilgrimage.map((temple) => (
-              <div
-                key={temple._id}
-                className="bg-[#fffaf5] rounded-3xl overflow-hidden shadow-xl hover:-translate-y-2 transition duration-300"
-              >
-                <img
-                  src={temple.images?.[0]}
-                  alt={temple.templeName}
-                  className="h-72 w-full object-cover"
-                />
+        return (
+          <section
+            key={type}
+            className="bg-white py-24 px-6"
+          >
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <p className="text-orange-500 uppercase tracking-[4px] font-semibold mb-3">
+                  Sacred Pilgrimage
+                </p>
 
-                <div className="p-7">
-                  <div className="flex items-center gap-2 text-orange-500 mb-3">
-                    <MapPin size={18} />
-
-                    <span>{temple.city}</span>
-                  </div>
-
-                  <h3 className="text-2xl font-bold mb-4">
-                    {temple.templeName}
-                  </h3>
-
-                  <button
-                    onClick={() =>
-                      navigate(`/templeDetails/${temple._id}`)
-                    }
-                    className="flex items-center gap-2 text-orange-500 font-semibold"
-                  >
-                    Explore More
-
-                    <ArrowRight size={18} />
-                  </button>
-                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-gray-900">
+                  {type} Temples
+                </h2>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ================= ARCHITECTURE SECTION ================= */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {templesByType.map((temple) => (
+                  <div
+                    key={temple._id}
+                    className="bg-[#fffaf5] rounded-3xl overflow-hidden shadow-xl hover:-translate-y-2 transition duration-300"
+                  >
+                    <img
+                      src={
+                        temple.images?.[0]?.url ||
+                        temple.images?.[0]
+                      }
+                      alt={temple.templeName}
+                      className="h-72 w-full object-cover"
+                    />
+
+                    <div className="p-7">
+                      <div className="flex items-center gap-2 text-orange-500 mb-3">
+                        <MapPin size={18} />
+
+                        <span>{temple.city}</span>
+                      </div>
+
+                      <h3 className="text-2xl font-bold mb-4">
+                        {temple.templeName}
+                      </h3>
+
+                      <div className="flex flex-wrap gap-2 mb-5">
+                        {temple.pilgrimageCircuits?.map(
+                          (circuit, index) => (
+                            <span
+                              key={index}
+                              className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-semibold"
+                            >
+                              {circuit}
+                            </span>
+                          ),
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/templeDetails/${temple._id}`,
+                          )
+                        }
+                        className="flex items-center gap-2 text-orange-500 font-semibold"
+                      >
+                        Explore More
+
+                        <ArrowRight size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })}
+
+      {/* ================= ARCHITECTURE ================= */}
 
       <section className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
@@ -353,7 +389,10 @@ const Home = () => {
                 className="bg-white rounded-3xl overflow-hidden shadow-xl hover:-translate-y-2 transition duration-300"
               >
                 <img
-                  src={temple.images?.[0]}
+                  src={
+                    temple.images?.[0]?.url ||
+                    temple.images?.[0]
+                  }
                   alt={temple.templeName}
                   className="h-72 w-full object-cover"
                 />
@@ -369,7 +408,12 @@ const Home = () => {
                     {temple.templeName}
                   </h3>
 
-                  <button className="flex items-center gap-2 text-orange-500 font-semibold">
+                  <button
+                    onClick={() =>
+                      navigate(`/templeDetails/${temple._id}`)
+                    }
+                    className="flex items-center gap-2 text-orange-500 font-semibold"
+                  >
                     Discover Heritage
 
                     <ArrowRight size={18} />
@@ -381,7 +425,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= CTA SECTION ================= */}
+      {/* ================= CTA ================= */}
 
       <section className="bg-orange-500 py-24 px-6 text-center text-white">
         <div className="max-w-4xl mx-auto">
@@ -395,7 +439,7 @@ const Home = () => {
           </p>
 
           <Link
-            to="/templeList"
+            to="/circuits"
             className="inline-block px-10 py-5 bg-white text-orange-500 rounded-full text-lg font-bold hover:scale-105 transition duration-300 shadow-2xl"
           >
             Explore All Temples

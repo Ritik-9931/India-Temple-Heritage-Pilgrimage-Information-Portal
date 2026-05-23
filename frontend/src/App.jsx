@@ -18,6 +18,8 @@ import TempleDetail from "./pages/TempleDetail";
 import UpdateUser from "./pages/UpdateUser";
 import OTPSystem from "./components/OTPSystem";
 import OTPProtectedRoute from "./routes/OTPProtectedRoute";
+import PilgrimageCircuits from "./pages/PilgrimageCircuits";
+import CircuitsDetails from "./pages/CircuitsDetails";
 
 const App = () => {
   const myroute = createBrowserRouter([
@@ -81,6 +83,14 @@ const App = () => {
           path: "templeDetails/:id",
           element: <TempleDetail />,
         },
+        {
+          path: "circuits",
+          element: <PilgrimageCircuits />
+        },
+        {
+          path: "travel/:pilgrimage",
+          element: <CircuitsDetails />
+        }
       ],
     },
     {
