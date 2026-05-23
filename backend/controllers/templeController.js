@@ -72,7 +72,7 @@ export const createTemple = async (req, res) => {
 export const getTemples = async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
-    const limit = 8;
+    const limit = 100;
 
     const keyword = req.query.keyword
       ? {

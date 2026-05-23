@@ -18,6 +18,7 @@ import TempleDetail from "./pages/TempleDetail";
 import UpdateUser from "./pages/UpdateUser";
 import OTPSystem from "./components/OTPSystem";
 import OTPProtectedRoute from "./routes/OTPProtectedRoute";
+import Search from "./pages/Search";
 
 const App = () => {
   const myroute = createBrowserRouter([
@@ -78,9 +79,13 @@ const App = () => {
           ),
         },
         {
-          path: "/templeDetails/:id",
+          path: "templeDetails/:id",
           element: <TempleDetail />,
         },
+        {
+          path: "search/:key",
+          element: <Search />
+        }
       ],
     },
     {
