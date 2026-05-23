@@ -1,7 +1,22 @@
 import React, { useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import { useParams } from "react-router-dom";
+
+import {
+  MapPin,
+  Star,
+  Clock,
+  Landmark,
+  ScrollText,
+  ShieldCheck,
+  Sparkles,
+  Camera,
+} from "lucide-react";
+
 import { fetchTempleById } from "../redux/slices/templeSlice";
+
 import NearbyMap from "../components/NearbyMap";
 
 const TempleDetail = () => {
@@ -17,7 +32,7 @@ const TempleDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-orange-50">
         <h1 className="text-3xl font-bold text-orange-500 animate-pulse">
           Loading Temple...
         </h1>
@@ -27,7 +42,7 @@ const TempleDetail = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-orange-50">
         <h1 className="text-2xl font-semibold text-red-500">{error}</h1>
       </div>
     );
@@ -36,9 +51,10 @@ const TempleDetail = () => {
   return (
     <>
       {temple && (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="bg-orange-50 min-h-screen">
           {/* HERO SECTION */}
-          <div className="relative h-[70vh] overflow-hidden">
+
+          <div className="relative h-[75vh] overflow-hidden">
             <img
               src={temple.images?.[0]}
               alt={temple.templeName}
@@ -48,44 +64,55 @@ const TempleDetail = () => {
             <div className="absolute inset-0 bg-black/60"></div>
 
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-              <span className="bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-semibold mb-5 shadow-lg">
-                🛕 Sacred Destination
+              <span className="bg-orange-500 text-white px-6 py-2 rounded-full text-sm font-semibold mb-6 shadow-lg">
+                🛕 Sacred Spiritual Destination
               </span>
 
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
+              <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
                 {temple.templeName}
               </h1>
 
-              <p className="text-lg md:text-2xl text-gray-200 max-w-2xl">
-                📍 {temple.city}, {temple.state}
+              <p className="text-lg md:text-2xl text-gray-200 flex items-center gap-2">
+                <MapPin size={24} />
+                {temple.city}, {temple.state}
               </p>
 
-              <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-white">
-                  ⭐ {temple.rating} Rating
+              <div className="flex flex-wrap justify-center gap-4 mt-10">
+                <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-white flex items-center gap-2">
+                  <Star size={18} />
+                  {temple.rating} Rating
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-white">
-                  🕒 {temple.timing}
+                <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-white flex items-center gap-2">
+                  <Clock size={18} />
+                  {temple.darshanTimings || "Timing Not Available"}
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-white">
-                  🏛️ {temple.architectureStyle}
+                <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-white flex items-center gap-2">
+                  <Landmark size={18} />
+                  {temple.architectureStyle || "Ancient Architecture"}
                 </div>
               </div>
             </div>
           </div>
 
           {/* MAIN SECTION */}
+
           <div className="max-w-7xl mx-auto px-4 py-16">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
               {/* LEFT SIDE */}
+
               <div className="lg:col-span-2 space-y-10">
                 {/* ABOUT */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                    About Temple
-                  </h2>
+                  <div className="flex items-center gap-3 mb-6">
+                    <ScrollText className="text-orange-500" />
+
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      About Temple
+                    </h2>
+                  </div>
 
                   <p className="text-gray-600 leading-8 text-lg">
                     {temple.history}
@@ -93,13 +120,14 @@ const TempleDetail = () => {
                 </div>
 
                 {/* TEMPLE INFO */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-8">
                     Temple Information
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-gray-50 rounded-2xl p-5">
+                    <div className="bg-orange-50 rounded-2xl p-5">
                       <p className="text-gray-500 mb-2">Main Deity</p>
 
                       <h3 className="text-xl font-bold text-gray-800">
@@ -107,33 +135,69 @@ const TempleDetail = () => {
                       </h3>
                     </div>
 
-                    <div className="bg-gray-50 rounded-2xl p-5">
-                      <p className="text-gray-500 mb-2">Architecture</p>
+                    <div className="bg-orange-50 rounded-2xl p-5">
+                      <p className="text-gray-500 mb-2">Architecture Style</p>
 
                       <h3 className="text-xl font-bold text-gray-800">
-                        {temple.architectureStyle}
+                        {temple.architectureStyle || "N/A"}
                       </h3>
                     </div>
 
-                    <div className="bg-gray-50 rounded-2xl p-5">
+                    <div className="bg-orange-50 rounded-2xl p-5">
                       <p className="text-gray-500 mb-2">Dynasty</p>
 
                       <h3 className="text-xl font-bold text-gray-800">
-                        {temple.dynasty}
+                        {temple.dynasty || "N/A"}
                       </h3>
                     </div>
 
-                    <div className="bg-gray-50 rounded-2xl p-5">
-                      <p className="text-gray-500 mb-2">Build Year</p>
+                    <div className="bg-orange-50 rounded-2xl p-5">
+                      <p className="text-gray-500 mb-2">Built Year</p>
 
                       <h3 className="text-xl font-bold text-gray-800">
-                        {temple.builtYear}
+                        {temple.builtYear || "Unknown"}
+                      </h3>
+                    </div>
+
+                    <div className="bg-orange-50 rounded-2xl p-5">
+                      <p className="text-gray-500 mb-2">Address</p>
+
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {temple.address || "Address Not Available"}
+                      </h3>
+                    </div>
+
+                    <div className="bg-orange-50 rounded-2xl p-5">
+                      <p className="text-gray-500 mb-2">Darshan Timings</p>
+
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {temple.darshanTimings || "N/A"}
                       </h3>
                     </div>
                   </div>
                 </div>
 
+                {/* VISITOR GUIDELINES */}
+
+                <div className="bg-white rounded-3xl shadow-lg p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <ShieldCheck className="text-orange-500" />
+
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      Visitor Guidelines
+                    </h2>
+                  </div>
+
+                  <div className="bg-orange-50 border border-orange-100 rounded-2xl p-6">
+                    <p className="text-gray-700 leading-8 text-lg">
+                      {temple.visitorGuidelines ||
+                        "No visitor guidelines available."}
+                    </p>
+                  </div>
+                </div>
+
                 {/* DRESS CODE */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">
                     Dress Code
@@ -141,14 +205,14 @@ const TempleDetail = () => {
 
                   <div className="bg-orange-50 border border-orange-100 rounded-2xl p-6">
                     <p className="text-gray-700 leading-8 text-lg">
-                      {temple.dressCode
-                        ? temple.dressCode
-                        : "No specific dress code information available."}
+                      {temple.dressCode ||
+                        "No dress code information available."}
                     </p>
                   </div>
                 </div>
 
                 {/* CATEGORIES */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">
                     Categories
@@ -167,28 +231,65 @@ const TempleDetail = () => {
                 </div>
 
                 {/* FESTIVALS */}
+
+                <div className="bg-white rounded-3xl shadow-lg p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Sparkles className="text-yellow-500" />
+
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      Major Festivals
+                    </h2>
+                  </div>
+
+                  <div className="flex flex-wrap gap-4">
+                    {temple.festivals?.length > 0 ? (
+                      temple.festivals.map((fest, index) => (
+                        <span
+                          key={index}
+                          className="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-full font-semibold"
+                        >
+                          🎉 {fest}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No festivals available.</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* RITUALS */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                    Major Festivals
+                    Rituals & पूजा
                   </h2>
 
                   <div className="flex flex-wrap gap-4">
-                    {temple.festivals?.map((fest, index) => (
-                      <span
-                        key={index}
-                        className="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-full font-semibold"
-                      >
-                        🎉 {fest}
-                      </span>
-                    ))}
+                    {temple.rituals?.length > 0 ? (
+                      temple.rituals.map((ritual, index) => (
+                        <span
+                          key={index}
+                          className="bg-purple-100 text-purple-700 px-5 py-2 rounded-full font-semibold"
+                        >
+                          🪔 {ritual}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No rituals available.</p>
+                    )}
                   </div>
                 </div>
 
                 {/* GALLERY */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-8">
-                    Temple Gallery
-                  </h2>
+                  <div className="flex items-center gap-3 mb-8">
+                    <Camera className="text-orange-500" />
+
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      Temple Gallery
+                    </h2>
+                  </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {temple.images?.map((img, index) => (
@@ -208,8 +309,10 @@ const TempleDetail = () => {
               </div>
 
               {/* RIGHT SIDE */}
+
               <div className="space-y-8">
-                {/* STATUS CARD */}
+                {/* STATUS */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">
                     Temple Status
@@ -229,6 +332,7 @@ const TempleDetail = () => {
                 </div>
 
                 {/* QUICK INFO */}
+
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">
                     Quick Info
@@ -244,9 +348,19 @@ const TempleDetail = () => {
                     </div>
 
                     <div>
-                      <p className="text-gray-500">Timing</p>
+                      <p className="text-gray-500">Address</p>
 
-                      <h3 className="font-semibold text-lg">{temple.timings}</h3>
+                      <h3 className="font-semibold text-lg">
+                        {temple.address || "N/A"}
+                      </h3>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-500">Darshan Timings</p>
+
+                      <h3 className="font-semibold text-lg">
+                        {temple.darshanTimings || "N/A"}
+                      </h3>
                     </div>
 
                     <div>
@@ -261,6 +375,7 @@ const TempleDetail = () => {
                 </div>
 
                 {/* MAP */}
+
                 <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
                   <NearbyMap temple={temple} />
                 </div>

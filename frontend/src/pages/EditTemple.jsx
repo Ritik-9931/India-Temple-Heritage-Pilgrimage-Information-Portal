@@ -11,7 +11,13 @@ import {
 
 import { fetchCategories } from "../redux/slices/categorySlice";
 
-import { Upload, ImagePlus, MapPin } from "lucide-react";
+import {
+  Upload,
+  ImagePlus,
+  MapPin,
+  Clock,
+  ScrollText,
+} from "lucide-react";
 
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -23,10 +29,12 @@ const EditTemple = () => {
   const { id } = useParams();
 
   const { loading, error, success, temple } = useSelector(
-    (state) => state.temple,
+    (state) => state.temple
   );
 
-  const { categories: categoryList } = useSelector((state) => state.category);
+  const { categories: categoryList } = useSelector(
+    (state) => state.category
+  );
 
   /* =========================
      STATES
@@ -42,6 +50,8 @@ const EditTemple = () => {
 
   const [city, setCity] = useState("");
 
+  const [address, setAddress] = useState("");
+
   const [history, setHistory] = useState("");
 
   const [architectureStyle, setArchitectureStyle] = useState("");
@@ -50,7 +60,11 @@ const EditTemple = () => {
 
   const [builtYear, setBuiltYear] = useState("");
 
-  const [timings, setTimings] = useState("");
+  const [darshanTimings, setDarshanTimings] = useState("");
+
+  const [visitorGuidelines, setVisitorGuidelines] = useState("");
+
+  const [dressCode, setDressCode] = useState("");
 
   const [latitude, setLatitude] = useState("");
 
@@ -58,11 +72,11 @@ const EditTemple = () => {
 
   const [festivals, setFestivals] = useState("");
 
+  const [rituals, setRituals] = useState("");
+
   const [categories, setCategories] = useState([]);
 
   const [featured, setFeatured] = useState(false);
-
-  const [dressCode, setDressCode] = useState("");
 
   const [rating, setRating] = useState(4.5);
 
@@ -102,6 +116,8 @@ const EditTemple = () => {
 
       setCity(temple.city || "");
 
+      setAddress(temple.address || "");
+
       setHistory(temple.history || "");
 
       setArchitectureStyle(temple.architectureStyle || "");
@@ -110,7 +126,11 @@ const EditTemple = () => {
 
       setBuiltYear(temple.builtYear || "");
 
-      setTimings(temple.timings || "");
+      setDarshanTimings(temple.darshanTimings || "");
+
+      setVisitorGuidelines(temple.visitorGuidelines || "");
+
+      setDressCode(temple.dressCode || "");
 
       setLatitude(temple.location?.latitude || "");
 
@@ -118,11 +138,11 @@ const EditTemple = () => {
 
       setFestivals(temple.festivals?.join(", ") || "");
 
+      setRituals(temple.rituals?.join(", ") || "");
+
       setCategories(temple.categories || []);
 
       setFeatured(temple.featured || false);
-
-      setDressCode(temple.dressCode || "");
 
       setRating(temple.rating || 4.5);
 
@@ -135,7 +155,12 @@ const EditTemple = () => {
   ========================= */
 
   useEffect(() => {
-    setSlug(templeName.toLowerCase().replace(/\s+/g, "-"));
+    setSlug(
+      templeName
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+    );
   }, [templeName]);
 
   /* =========================
@@ -147,7 +172,9 @@ const EditTemple = () => {
 
     setNewImages((prev) => [...prev, ...files]);
 
-    const previews = files.map((file) => URL.createObjectURL(file));
+    const previews = files.map((file) =>
+      URL.createObjectURL(file)
+    );
 
     setNewPreviewImages((prev) => [...prev, ...previews]);
   };
@@ -158,7 +185,7 @@ const EditTemple = () => {
 
   const removeExistingImage = (indexToRemove) => {
     setExistingImages((prev) =>
-      prev.filter((_, index) => index !== indexToRemove),
+      prev.filter((_, index) => index !== indexToRemove)
     );
   };
 
@@ -168,11 +195,11 @@ const EditTemple = () => {
 
   const removeNewImage = (indexToRemove) => {
     setNewPreviewImages((prev) =>
-      prev.filter((_, index) => index !== indexToRemove),
+      prev.filter((_, index) => index !== indexToRemove)
     );
 
     setNewImages((prev) =>
-      prev.filter((_, index) => index !== indexToRemove),
+      prev.filter((_, index) => index !== indexToRemove)
     );
   };
 
@@ -182,7 +209,9 @@ const EditTemple = () => {
 
   const handleCategory = (category) => {
     if (categories.includes(category)) {
-      setCategories(categories.filter((item) => item !== category));
+      setCategories(
+        categories.filter((item) => item !== category)
+      );
     } else {
       setCategories([...categories, category]);
     }
@@ -207,19 +236,32 @@ const EditTemple = () => {
 
     formData.append("city", city);
 
+    formData.append("address", address);
+
     formData.append("history", history);
 
-    formData.append("architectureStyle", architectureStyle);
+    formData.append(
+      "architectureStyle",
+      architectureStyle
+    );
 
     formData.append("dynasty", dynasty);
 
     formData.append("builtYear", builtYear);
 
-    formData.append("timings", timings);
+    formData.append(
+      "darshanTimings",
+      darshanTimings
+    );
 
-    formData.append("featured", featured);
+    formData.append(
+      "visitorGuidelines",
+      visitorGuidelines
+    );
 
     formData.append("dressCode", dressCode);
+
+    formData.append("featured", featured);
 
     formData.append("rating", rating);
 
@@ -229,12 +271,22 @@ const EditTemple = () => {
 
     formData.append(
       "existingImages",
-      JSON.stringify(existingImages),
+      JSON.stringify(existingImages)
     );
 
-    festivals.split(",").forEach((festival) => {
-      formData.append("festivals", festival.trim());
-    });
+    festivals
+      .split(",")
+      .filter((item) => item.trim() !== "")
+      .forEach((festival) => {
+        formData.append("festivals", festival.trim());
+      });
+
+    rituals
+      .split(",")
+      .filter((item) => item.trim() !== "")
+      .forEach((ritual) => {
+        formData.append("rituals", ritual.trim());
+      });
 
     categories.forEach((category) => {
       formData.append("categories", category);
@@ -248,7 +300,7 @@ const EditTemple = () => {
       updateTemple({
         id,
         formData,
-      }),
+      })
     );
   };
 
@@ -283,7 +335,7 @@ const EditTemple = () => {
           </h1>
 
           <p className="text-gray-600 text-lg">
-            Edit temple information, history and images.
+            Edit temple information, rituals, festivals and images.
           </p>
         </div>
 
@@ -297,7 +349,9 @@ const EditTemple = () => {
               type="text"
               placeholder="Temple Name"
               value={templeName}
-              onChange={(e) => setTempleName(e.target.value)}
+              onChange={(e) =>
+                setTempleName(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -313,7 +367,9 @@ const EditTemple = () => {
               type="text"
               placeholder="Deity"
               value={deity}
-              onChange={(e) => setDeity(e.target.value)}
+              onChange={(e) =>
+                setDeity(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -321,7 +377,9 @@ const EditTemple = () => {
               type="text"
               placeholder="State"
               value={stateName}
-              onChange={(e) => setStateName(e.target.value)}
+              onChange={(e) =>
+                setStateName(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -329,7 +387,19 @@ const EditTemple = () => {
               type="text"
               placeholder="City"
               value={city}
-              onChange={(e) => setCity(e.target.value)}
+              onChange={(e) =>
+                setCity(e.target.value)
+              }
+              className="border p-4 rounded-2xl"
+            />
+
+            <input
+              type="text"
+              placeholder="Address"
+              value={address}
+              onChange={(e) =>
+                setAddress(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -337,7 +407,9 @@ const EditTemple = () => {
               type="text"
               placeholder="Architecture Style"
               value={architectureStyle}
-              onChange={(e) => setArchitectureStyle(e.target.value)}
+              onChange={(e) =>
+                setArchitectureStyle(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -345,7 +417,9 @@ const EditTemple = () => {
               type="text"
               placeholder="Dynasty"
               value={dynasty}
-              onChange={(e) => setDynasty(e.target.value)}
+              onChange={(e) =>
+                setDynasty(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -353,15 +427,19 @@ const EditTemple = () => {
               type="text"
               placeholder="Built Year"
               value={builtYear}
-              onChange={(e) => setBuiltYear(e.target.value)}
+              onChange={(e) =>
+                setBuiltYear(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
             <input
               type="text"
-              placeholder="Temple Timings"
-              value={timings}
-              onChange={(e) => setTimings(e.target.value)}
+              placeholder="Darshan Timings"
+              value={darshanTimings}
+              onChange={(e) =>
+                setDarshanTimings(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -369,7 +447,9 @@ const EditTemple = () => {
               type="text"
               placeholder="Dress Code"
               value={dressCode}
-              onChange={(e) => setDressCode(e.target.value)}
+              onChange={(e) =>
+                setDressCode(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
 
@@ -378,20 +458,50 @@ const EditTemple = () => {
               step="0.1"
               placeholder="Rating"
               value={rating}
-              onChange={(e) => setRating(e.target.value)}
+              onChange={(e) =>
+                setRating(e.target.value)
+              }
               className="border p-4 rounded-2xl"
             />
           </div>
 
           {/* HISTORY */}
 
-          <textarea
-            rows="7"
-            placeholder="Temple History"
-            value={history}
-            onChange={(e) => setHistory(e.target.value)}
-            className="w-full border p-5 rounded-2xl"
-          ></textarea>
+          <div>
+            <label className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <ScrollText />
+              Temple History
+            </label>
+
+            <textarea
+              rows="7"
+              placeholder="Temple History"
+              value={history}
+              onChange={(e) =>
+                setHistory(e.target.value)
+              }
+              className="w-full border p-5 rounded-2xl"
+            ></textarea>
+          </div>
+
+          {/* VISITOR GUIDELINES */}
+
+          <div>
+            <label className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <Clock />
+              Visitor Guidelines
+            </label>
+
+            <textarea
+              rows="5"
+              placeholder="Visitor Guidelines"
+              value={visitorGuidelines}
+              onChange={(e) =>
+                setVisitorGuidelines(e.target.value)
+              }
+              className="w-full border p-5 rounded-2xl"
+            ></textarea>
+          </div>
 
           {/* LOCATION */}
 
@@ -407,7 +517,9 @@ const EditTemple = () => {
                 step="any"
                 placeholder="Latitude"
                 value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
+                onChange={(e) =>
+                  setLatitude(e.target.value)
+                }
                 className="border p-4 rounded-2xl"
               />
 
@@ -416,7 +528,9 @@ const EditTemple = () => {
                 step="any"
                 placeholder="Longitude"
                 value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
+                onChange={(e) =>
+                  setLongitude(e.target.value)
+                }
                 className="border p-4 rounded-2xl"
               />
             </div>
@@ -426,23 +540,41 @@ const EditTemple = () => {
 
           <input
             type="text"
-            placeholder="Festivals"
+            placeholder="Festivals (comma separated)"
             value={festivals}
-            onChange={(e) => setFestivals(e.target.value)}
+            onChange={(e) =>
+              setFestivals(e.target.value)
+            }
+            className="w-full border p-4 rounded-2xl"
+          />
+
+          {/* RITUALS */}
+
+          <input
+            type="text"
+            placeholder="Rituals (comma separated)"
+            value={rituals}
+            onChange={(e) =>
+              setRituals(e.target.value)
+            }
             className="w-full border p-4 rounded-2xl"
           />
 
           {/* CATEGORIES */}
 
           <div>
-            <h3 className="text-2xl font-bold mb-5">Categories</h3>
+            <h3 className="text-2xl font-bold mb-5">
+              Categories
+            </h3>
 
             <div className="flex flex-wrap gap-4">
               {categoryList.map((category) => (
                 <button
                   type="button"
                   key={category._id}
-                  onClick={() => handleCategory(category.name)}
+                  onClick={() =>
+                    handleCategory(category.name)
+                  }
                   className={`px-5 py-3 rounded-full border transition ${
                     categories.includes(category.name)
                       ? "bg-orange-500 text-white border-orange-500"
@@ -461,7 +593,9 @@ const EditTemple = () => {
             <input
               type="checkbox"
               checked={featured}
-              onChange={(e) => setFeatured(e.target.checked)}
+              onChange={(e) =>
+                setFeatured(e.target.checked)
+              }
             />
 
             <label className="font-semibold text-lg">
@@ -478,7 +612,10 @@ const EditTemple = () => {
             </label>
 
             <label className="border-2 border-dashed border-orange-300 p-10 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:bg-orange-50 transition">
-              <ImagePlus size={50} className="text-orange-500 mb-4" />
+              <ImagePlus
+                size={50}
+                className="text-orange-500 mb-4"
+              />
 
               <p className="text-lg font-semibold">
                 Click to Upload Images
@@ -506,7 +643,9 @@ const EditTemple = () => {
 
                   <button
                     type="button"
-                    onClick={() => removeExistingImage(index)}
+                    onClick={() =>
+                      removeExistingImage(index)
+                    }
                     className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full"
                   >
                     ×
@@ -528,7 +667,9 @@ const EditTemple = () => {
 
                   <button
                     type="button"
-                    onClick={() => removeNewImage(index)}
+                    onClick={() =>
+                      removeNewImage(index)
+                    }
                     className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full"
                   >
                     ×

@@ -45,6 +45,8 @@ const CreateTemple = () => {
 
   const [city, setCity] = useState("");
 
+  const [address, setAddress] = useState("");
+
   const [history, setHistory] = useState("");
 
   const [architectureStyle, setArchitectureStyle] = useState("");
@@ -53,13 +55,17 @@ const CreateTemple = () => {
 
   const [builtYear, setBuiltYear] = useState("");
 
-  const [timings, setTimings] = useState("");
+  const [darshanTimings, setDarshanTimings] = useState("");
+
+  const [visitorGuidelines, setVisitorGuidelines] = useState("");
 
   const [latitude, setLatitude] = useState("");
 
   const [longitude, setLongitude] = useState("");
 
   const [festivals, setFestivals] = useState("");
+
+  const [rituals, setRituals] = useState("");
 
   const [categories, setCategories] = useState([]);
 
@@ -117,7 +123,13 @@ const CreateTemple = () => {
 
       setBuiltYear(temple.builtYear || "");
 
-      setTimings(temple.timings || "");
+      setAddress(temple.address || "");
+
+      setDarshanTimings(temple.darshanTimings || "");
+
+      setVisitorGuidelines(temple.visitorGuidelines || "");
+
+      setRituals(temple.rituals?.join(", ") || "");
 
       setLatitude(temple.location?.latitude || "");
 
@@ -186,7 +198,11 @@ const CreateTemple = () => {
 
     formData.append("builtYear", builtYear);
 
-    formData.append("timings", timings);
+    formData.append("address", address);
+
+    formData.append("darshanTimings", darshanTimings);
+
+    formData.append("visitorGuidelines", visitorGuidelines);
 
     formData.append("featured", featured);
 
@@ -200,6 +216,10 @@ const CreateTemple = () => {
 
     festivals.split(",").forEach((festival) => {
       formData.append("festivals", festival.trim());
+    });
+
+    rituals.split(",").forEach((ritual) => {
+      formData.append("rituals", ritual.trim());
     });
 
     categories.forEach((category) => {
@@ -288,7 +308,10 @@ const CreateTemple = () => {
         setArchitectureStyle("");
         setDynasty("");
         setBuiltYear("");
-        setTimings("");
+        setAddress("");
+        setDarshanTimings("");
+        setVisitorGuidelines("");
+        setRituals("");
         setLatitude("");
         setLongitude("");
         setFestivals("");
@@ -368,6 +391,14 @@ const CreateTemple = () => {
 
               <input
                 type="text"
+                placeholder="Temple Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="border p-4 rounded-2xl"
+              />
+
+              <input
+                type="text"
                 placeholder="Architecture Style"
                 value={architectureStyle}
                 onChange={(e) => setArchitectureStyle(e.target.value)}
@@ -392,9 +423,9 @@ const CreateTemple = () => {
 
               <input
                 type="text"
-                placeholder="Temple Timings"
-                value={timings}
-                onChange={(e) => setTimings(e.target.value)}
+                placeholder="Darshan Timings"
+                value={darshanTimings}
+                onChange={(e) => setDarshanTimings(e.target.value)}
                 className="border p-4 rounded-2xl"
               />
 
@@ -423,6 +454,14 @@ const CreateTemple = () => {
               placeholder="Temple History"
               value={history}
               onChange={(e) => setHistory(e.target.value)}
+              className="w-full border p-5 rounded-2xl"
+            ></textarea>
+
+            <textarea
+              rows="5"
+              placeholder="Visitor Guidelines"
+              value={visitorGuidelines}
+              onChange={(e) => setVisitorGuidelines(e.target.value)}
               className="w-full border p-5 rounded-2xl"
             ></textarea>
 
@@ -462,6 +501,14 @@ const CreateTemple = () => {
               placeholder="Festivals"
               value={festivals}
               onChange={(e) => setFestivals(e.target.value)}
+              className="w-full border p-4 rounded-2xl"
+            />
+
+            <input
+              type="text"
+              placeholder="Rituals (comma separated)"
+              value={rituals}
+              onChange={(e) => setRituals(e.target.value)}
               className="w-full border p-4 rounded-2xl"
             />
 
