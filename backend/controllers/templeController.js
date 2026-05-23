@@ -28,6 +28,8 @@ export const createTemple = async (req, res) => {
 
       city: req.body.city,
 
+      address: req.body.address,
+
       history: req.body.history,
 
       architectureStyle: req.body.architectureStyle,
@@ -36,7 +38,9 @@ export const createTemple = async (req, res) => {
 
       builtYear: req.body.builtYear,
 
-      timings: req.body.timings,
+      darshanTimings: req.body.darshanTimings,
+
+      visitorGuidelines: req.body.visitorGuidelines,
 
       featured: req.body.featured,
 
@@ -50,6 +54,10 @@ export const createTemple = async (req, res) => {
 
       festivals: Array.isArray(req.body.festivals)
         ? req.body.festivals
+        : [req.body.festivals],
+
+      rituals: Array.isArray(req.body.rituals)
+        ? req.body.rituals
         : [req.body.festivals],
 
       location: {
@@ -223,6 +231,8 @@ export const updateTemple = async (req, res) => {
 
     temple.city = req.body.city || temple.city;
 
+    temple.address = req.body.address || temple.address;
+
     temple.history = req.body.history || temple.history;
 
     temple.architectureStyle =
@@ -232,7 +242,10 @@ export const updateTemple = async (req, res) => {
 
     temple.builtYear = req.body.builtYear || temple.builtYear;
 
-    temple.timings = req.body.timings || temple.timings;
+    temple.darshanTimings = req.body.darshanTimings || temple.darshanTimings;
+
+    temple.visitorGuidelines =
+      req.body.visitorGuidelines || temple.visitorGuidelines;
 
     temple.featured =
       req.body.featured !== undefined ? req.body.featured : temple.featured;
@@ -252,6 +265,12 @@ export const updateTemple = async (req, res) => {
         ? req.body.festivals
         : [req.body.festivals]
       : temple.festivals;
+
+    temple.rituals = req.body.rituals
+      ? Array.isArray(req.body.rituals)
+        ? req.body.rituals
+        : [req.body.rituals]
+      : temple.rituals;
 
     temple.location = {
       latitude: Number(req.body.latitude) || temple.location.latitude,

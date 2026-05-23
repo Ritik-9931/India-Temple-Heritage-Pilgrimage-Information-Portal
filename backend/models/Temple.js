@@ -5,6 +5,7 @@ const templeSchema = new mongoose.Schema(
     templeName: {
       type: String,
       required: true,
+      trim: true
     },
 
     slug: {
@@ -26,16 +27,32 @@ const templeSchema = new mongoose.Schema(
       },
     ],
 
-    deity: {
-      type: String,
-    },
-
     state: {
       type: String,
+      require: true,
+      trim: true,
     },
 
     city: {
       type: String,
+      require: true,
+      trim: true,
+    },
+
+    address: {
+      type: String,
+      trim: true
+    },
+
+    location: {
+      latitude: Number,
+      longitude: Number,
+    },
+
+    deity: {
+      type: String,
+      require: true,
+      trim: true
     },
 
     history: {
@@ -54,16 +71,21 @@ const templeSchema = new mongoose.Schema(
       type: String,
     },
 
-    timings: {
+    darshanTimings:{
+      type: String
+    },
+
+    visitorGuidelines: {
       type: String,
     },
 
-    location: {
-      latitude: Number,
-      longitude: Number,
+    dressCode: {
+      type: String,
     },
 
     festivals: [String],
+
+    rituals: [String],
 
     images: [String],
 
@@ -72,9 +94,6 @@ const templeSchema = new mongoose.Schema(
       default: false,
     },
 
-    dressCode: {
-      type: String,
-    },
     rating: {
       type: Number,
       default: 4.5,
