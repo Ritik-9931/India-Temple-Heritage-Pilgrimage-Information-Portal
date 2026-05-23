@@ -46,11 +46,15 @@ export const createTemple = async (req, res) => {
 
       dressCode: req.body.dressCode,
 
-      rating: req.body.rating,
+      rating: Number(req.body.rating) || 4.5,
 
       categories: Array.isArray(req.body.categories)
         ? req.body.categories
         : [req.body.categories],
+
+      pilgrimageCircuits: Array.isArray(req.body.pilgrimageCircuits)
+        ? req.body.pilgrimageCircuits
+        : [req.body.pilgrimageCircuits],
 
       festivals: Array.isArray(req.body.festivals)
         ? req.body.festivals
@@ -58,7 +62,7 @@ export const createTemple = async (req, res) => {
 
       rituals: Array.isArray(req.body.rituals)
         ? req.body.rituals
-        : [req.body.festivals],
+        : [req.body.rituals],
 
       location: {
         latitude: Number(req.body.latitude),
@@ -97,6 +101,30 @@ export const getTemples = async (req, res) => {
                 $options: "i",
               },
             },
+            {
+              state: {
+                $regex: req.query.keyword,
+                $options: "i",
+              },
+            },
+            {
+              city: {
+                $regex: req.query.keyword,
+                $options: "i",
+              },
+            },
+            {
+              deity: {
+                $regex: req.query.keyword,
+                $options: "i",
+              },
+            },
+            {
+              pilgrimageCircuits: {
+                $regex: req.query.keyword,
+                $options: "i",
+              },
+            },
           ],
         }
       : {};
@@ -104,6 +132,12 @@ export const getTemples = async (req, res) => {
     const category = req.query.category
       ? {
           categories: req.query.category,
+        }
+      : {};
+
+    const pilgrimageCircuits = req.query.pilgrimageCircuits
+      ? {
+          pilgrimageCircuits: req.query.pilgrimageCircuits,
         }
       : {};
 
@@ -117,6 +151,7 @@ export const getTemples = async (req, res) => {
       ...keyword,
       ...category,
       ...state,
+      ...pilgrimageCircuits,
     };
 
     const count = await Temple.countDocuments(query);
@@ -259,6 +294,12 @@ export const updateTemple = async (req, res) => {
         ? req.body.categories
         : [req.body.categories]
       : temple.categories;
+
+    temple.pilgrimageCircuits = req.body.pilgrimageCircuits
+      ? Array.isArray(req.body.pilgrimageCircuits)
+        ? req.body.pilgrimageCircuits
+        : [req.body.pilgrimageCircuits]
+      : temple.pilgrimageCircuits;
 
     temple.festivals = req.body.festivals
       ? Array.isArray(req.body.festivals)

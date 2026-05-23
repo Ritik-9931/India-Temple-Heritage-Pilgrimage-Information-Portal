@@ -5,7 +5,7 @@ const templeSchema = new mongoose.Schema(
     templeName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
     slug: {
@@ -27,6 +27,26 @@ const templeSchema = new mongoose.Schema(
       },
     ],
 
+    pilgrimageCircuits: [
+      {
+        type: String,
+        enum: [
+          "Char Dham",
+          "Chota Char Dham",
+          "Jyotirlinga",
+          "Shakti Peeth",
+          "Sapta Puri",
+          "Panch Kedar",
+          "Pancha Bhoota Sthalams",
+          "Divya Desam",
+          "Ashtavinayak",
+          "Kanwar Yatra",
+          "Amarnath Yatra",
+          "Kumbh Mela Circuit",
+        ],
+      },
+    ],
+
     state: {
       type: String,
       require: true,
@@ -41,7 +61,7 @@ const templeSchema = new mongoose.Schema(
 
     address: {
       type: String,
-      trim: true
+      trim: true,
     },
 
     location: {
@@ -52,7 +72,7 @@ const templeSchema = new mongoose.Schema(
     deity: {
       type: String,
       require: true,
-      trim: true
+      trim: true,
     },
 
     history: {
@@ -71,8 +91,8 @@ const templeSchema = new mongoose.Schema(
       type: String,
     },
 
-    darshanTimings:{
-      type: String
+    darshanTimings: {
+      type: String,
     },
 
     visitorGuidelines: {
@@ -101,7 +121,7 @@ const templeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const Temple = mongoose.model("Temple", templeSchema);
